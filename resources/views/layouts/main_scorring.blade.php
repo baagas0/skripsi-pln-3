@@ -22,7 +22,7 @@ License: For each use you must have a valid license purchased only from above li
 		<!--begin::Root-->
 		<div class="d-flex flex-column flex-root" id="kt_app_root">
 			<!--begin::Page bg image-->
-			<style>body { background-image: url('{{ asset('assets/media/auth/bg8.jpg') }}'); } [data-bs-theme="dark"] body { background-image: url('assets/media/auth/bg8-dark.jpg'); }</style>
+			<style>body { background-repeat: repeat !important; background-image: url('{{ asset('assets/media/auth/bg8.jpg') }}'); } [data-bs-theme="dark"] body { background-image: url('assets/media/auth/bg8-dark.jpg'); }</style>
 			<!--end::Page bg image-->
 			<!--begin::Authentication - Signup Welcome Message -->
 			<div class="d-flex flex-column flex-center flex-column-fluid">

@@ -240,6 +240,14 @@
                                                 'Organisasi/Unit kerja yang lebih baik',
                                             ];
                                             $selectedImpacts = $scoreLv4 ? $scoreLv4->impacts : [];
+                                            $isLainnya = false;
+                                            $lainnya = '';
+                                            foreach ($selectedImpacts as $i) {
+                                                if (str_contains($i, 'lainnya:')) {
+                                                    $isLainnya = true;
+                                                    $lainnya = str_replace('lainnya:', '', $i);
+                                                }
+                                            }
                                         @endphp
                                         <div class="row mt-3">
                                             @foreach ($impacts as $key => $impact)
@@ -262,11 +270,12 @@
                                             <div class="col-4 mt-3">
                                                 <div class="form-check form-check-custom form-check-solid">
                                                     <input class="form-check-input" type="checkbox"
-                                                        {{ auth()->user()->role_id == 6 ? '' : 'disabled' }}
+                                                        {{ !$scoreLv4 ? '' : 'disabled' }}
+                                                        {{ $isLainnya ? 'checked="true"' : '' }}
                                                         name="impacts[]" value="lainnya" id="impact_8" />
                                                     <label class="form-check-label" for="impact_8">
                                                         Lainnya
-                                                        <input type="text" disabled>
+                                                        <input type="text" value="{{ $lainnya }}" {{ !$scoreLv4 ? '' : 'disabled' }}>
                                                     </label>
                                                 </div>
                                             </div>

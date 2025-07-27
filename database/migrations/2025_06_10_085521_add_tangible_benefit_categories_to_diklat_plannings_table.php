@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('diklat_plannings', function (Blueprint $table) {
-            $table->json('tangible_benefit_categories')->nullable()->after('tangible_benefits');
+            $table->json('tangible_benefit_categories')->nullable();
         });
     }
 
