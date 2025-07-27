@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('scoring_lv4_tangible_id')->constrained('scoring_lv4_tangibles')->onDelete('cascade');
             $table->string('component_name'); // Component name (Level 2)
             $table->string('sub_component_name')->nullable(); // Sub-component name (Level 3)
-            $table->decimal('price', 20, 2)->default(0); // Price of the sub-component
+            $table->decimal('price', 50, 2)->default(0); // Price of the sub-component
             $table->string('operator')->default('*'); // Mathematical operator (* for multiply, + for add, etc.)
             $table->timestamps();
         });

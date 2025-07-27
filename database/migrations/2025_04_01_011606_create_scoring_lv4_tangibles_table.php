@@ -16,7 +16,7 @@ return new class extends Migration
             // diklat_id, category, cost
             $table->foreignId('diklat_id')->constrained('diklats')->onDelete('cascade');
             $table->string('category');
-            $table->decimal('cost', 10, 2)->default(0);
+            $table->decimal('cost', 50, 2)->default(0);
             $table->timestamps();
         });
     }

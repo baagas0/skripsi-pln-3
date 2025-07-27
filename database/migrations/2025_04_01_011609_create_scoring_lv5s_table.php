@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             // diklat_id, total_tangible, cost_of_training, roti
             $table->foreignId('diklat_id')->constrained('diklats')->onDelete('cascade');
-            $table->decimal('total_tangible', 10, 2)->default(0);
-            $table->decimal('cost_of_training', 10, 2)->default(0);
-            $table->decimal('roti', 10, 2)->default(0);
+            $table->decimal('total_tangible', 50, 2)->default(0);
+            $table->decimal('cost_of_training', 50, 2)->default(0);
+            $table->decimal('roti', 50, 2)->default(0);
             $table->timestamps();
         });
     }
