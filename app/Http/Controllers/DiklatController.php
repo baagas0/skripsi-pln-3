@@ -36,16 +36,57 @@ class DiklatController extends Controller
                 // PIC Area dan SRM melihat unit dari area mereka
                 $area = Auth::user()->area;
                 return $query->where('id', $area->unit_id);
-            })->get();
+            })
+            ->when($roleId == 7, function ($query) {
+                // HTD melihat unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($query) {
+                // Vice President melihat unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('id', $unitIds ?? []);
+            })
+            ->get();
 
         // Get areas based on role
         $areas = Area::when(in_array($roleId, [3, 4]), function ($query) {
             // PIC Area dan SRM hanya melihat area mereka
             return $query->where('id', Auth::user()->area_id);
-        })->get();
+        })
+        ->when($roleId == 7, function ($query) {
+            // HTD melihat area yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+            
+        })
+        ->when($roleId == 8, function ($query) {
+            // Vice President melihat area yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+            
+        })
+        ->get();
 
         $vendors = Vendor::all();
-        $years = Diklat::select('year')->distinct()->get();
+        $years = Diklat::select('year')
+        ->when($roleId == 7, function ($query) {
+            // HTD melihat tahun dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+        })
+        ->when($roleId == 8, function ($query) {
+            // Vice President melihat tahun dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+        })
+        ->distinct()->get();
         return view('diklat.index', compact('units', 'vendors', 'years', 'areas'));
     }
 
@@ -70,6 +111,18 @@ class DiklatController extends Controller
                 return $query->whereHas('areas', function ($q) use ($areaId) {
                     $q->where('areas.id', $areaId);
                 });
+            })
+            ->when($roleId == 7, function ($query) {
+                // HTD melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($query) {
+                // Vice President melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
             });
 
         if ($request->has('year')) {
@@ -100,9 +153,7 @@ class DiklatController extends Controller
             'area_ids' => 'required|array',
             'area_ids.*' => 'exists:areas,id',
             'diklat_type' => 'required|in:Pelatihan,Pelatihan & Sertifikasi',
-            'status_monitoring' => 'required',
-            'tangible_benefit_categories' => 'nullable|array',
-            'tangible_benefit_categories.*' => 'string'
+            'status_monitoring' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -125,7 +176,6 @@ class DiklatController extends Controller
             'diklat_type' => $request->diklat_type,
             'status_monitoring' => $request->status_monitoring,
             'slug' => Diklat::generateSlug($planning->name),
-            'tangible_benefit_categories' => $request->has('tangible_benefit_categories') ? json_encode($request->tangible_benefit_categories) : null,
         ]);
 
         // Attach multiple areas to the diklat
@@ -211,14 +261,6 @@ class DiklatController extends Controller
     public function getShow($id)
     {
         $diklat = Diklat::with(['unit', 'vendor', 'areas'])->findOrFail($id);
-        
-        // Decode tangible_benefit_categories if exists
-        if (!empty($diklat->tangible_benefit_categories)) {
-            $diklat->tangible_benefit_categories = json_decode($diklat->tangible_benefit_categories);
-        } else {
-            $diklat->tangible_benefit_categories = [];
-        }
-        
         return response()->json([
             'status' => 200,
             'data' => $diklat
@@ -251,8 +293,6 @@ class DiklatController extends Controller
             'total_cost' => 'required|numeric|min:0',
             'area_ids' => 'required|array',
             'area_ids.*' => 'exists:areas,id',
-            'tangible_benefit_categories' => 'nullable|array',
-            'tangible_benefit_categories.*' => 'string',
         ]);
 
         if ($validator->fails()) {
@@ -261,11 +301,8 @@ class DiklatController extends Controller
 
         $diklat = Diklat::findOrFail($id);
 
-        // Remove area_ids from request data and handle tangible_benefit_categories
+        // Remove area_ids from request data
         $requestData = $request->except('area_ids');
-        if ($request->has('tangible_benefit_categories')) {
-            $requestData['tangible_benefit_categories'] = json_encode($request->tangible_benefit_categories);
-        }
         $diklat->update($requestData);
 
         // REMOVE PENILAIAN

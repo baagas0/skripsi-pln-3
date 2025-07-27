@@ -33,7 +33,6 @@ class Diklat extends Model
         'status_monitoring',
         'diklat_type',
         'diklat_planning_id',
-        'tangible_benefit_categories',
     ];
     public function vendor()
     {
@@ -54,10 +53,6 @@ class Diklat extends Model
     public function tangibles()
     {
         return $this->hasMany(ScoringLv4_tangible::class);
-    }
-    public function details()
-    {
-        return $this->hasMany(ScoringLv4TangibleDetail::class, 'scoring_lv4_tangible_id');
     }
     public function scoreLv4()
     {

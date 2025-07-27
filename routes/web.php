@@ -49,6 +49,9 @@ Route::middleware('auth')->group(function () {
     routeController('/certificate', 'CertificateController');
     routeController('/report', 'ReportController');
     routeController('/activity', 'ActivityController');
+    routeController('/user', 'UserController');
+    routeController('/unit', 'UnitController');
+    routeController('/area', 'AreaController');
 
     // Add specific route for PDF download with levels parameter
     Route::get('/report/download-pdf/{diklatId}', 'App\Http\Controllers\ReportController@getDownloadPdf')->name('report.download-pdf');

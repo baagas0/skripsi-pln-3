@@ -29,7 +29,6 @@ class DiklatPlanning extends Model
         'approve_by_htd',
         'notes',
         'diklat_type',
-        'tangible_benefit_categories',
     ];
     public function vendor()
     {

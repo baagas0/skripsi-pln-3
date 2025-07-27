@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'User HTD Admin',
             'email' => 'htd_admin@gmail.com',
-            'password' => Hash::make('pln#573*'),
+            'password' => Hash::make('password'),
             'role_id' => 1, // Assuming 1 is admin role
         ]);
 
@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'User SRM',
             'email' => 'srm@gmail.com',
-            'password' => Hash::make('pln#573*'),
+            'password' => Hash::make('password'),
             'role_id' => 4, // Assuming 1 is admin role
         ]);
     }

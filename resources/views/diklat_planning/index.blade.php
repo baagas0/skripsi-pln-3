@@ -54,6 +54,16 @@
                             </a>
                             <!--end::Add data-->
 
+                            @if (auth()->user()->role_id == 1)
+                                <div class="btn-group me-3" role="group">
+                                    <a href="javascript:;" class="btn btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_bulk_actions">
+                                        <i class="fas fa-lock"></i>
+                                        Bulk Actions
+                                    </a>
+                                </div>
+                            @endif
+
                             <!--begin::Add data-->
                             @if (auth()->user()->role_id == 3)
                                 <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal"
@@ -295,21 +305,6 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="row mb-6">
-                                <label class="col-lg-4 col-form-label required fw-bold fs-6">Kategori Tangible
-                                    Benefit</label>
-                                <div class="col-lg-8 fv-row">
-                                    <select name="tangible_benefit_categories[]" class="form-select"
-                                        data-control="select2" data-placeholder="Pilih Kategori Tangible Benefit"
-                                        multiple>
-                                        <option value="Penghematan Biaya Bahan">Penghematan Biaya Bahan</option>
-                                        <option value="Pengurangan Biaya Project">Pengurangan Biaya Project</option>
-                                        <option value="Penghematan Waktu">Penghematan Waktu</option>
-                                        <option value="Penurunan Biaya Pembelian">Penurunan Biaya Pembelian</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -393,6 +388,111 @@
         </div>
     </div>
 
+    </div>
+    <!-- SRM Reject Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_srm_reject">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">SRM Rejection Notes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_srm_reject_form" class="form">
+                    <div class="modal-body">
+                        <input type="hidden" name="planning_id" id="srm_planning_id">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Rejection Notes</label>
+                            <textarea name="notes" class="form-control" rows="4" placeholder="Enter rejection reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="kt_srm_reject_submit">
+                            <span class="indicator-label">Reject</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTD Reject Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_htd_reject">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">HTD Rejection Notes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_htd_reject_form" class="form">
+                    <div class="modal-body">
+                        <input type="hidden" name="planning_id" id="htd_planning_id">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Rejection Notes</label>
+                            <textarea name="notes" class="form-control" rows="4" placeholder="Enter rejection reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="kt_htd_reject_submit">
+                            <span class="indicator-label">Reject</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_bulk_actions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Lock/Unlock Actions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_bulk_actions_form" class="form">
+                    <div class="modal-body">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Select Year</label>
+                            <select name="year" class="form-select" data-control="select2" data-placeholder="Select Year">
+                                <option></option>
+                                @foreach($years as $year)
+                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Action</label>
+                            <select name="action" class="form-select" data-control="select2" data-placeholder="Select Action">
+                                <option></option>
+                                <option value="lock">Lock All Records</option>
+                                <option value="unlock">Unlock All Records</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info">
+                            <strong>Note:</strong> This action will affect all diklat planning records for the selected year that you have permission to manage.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="kt_bulk_actions_submit">
+                            <span class="indicator-label">Execute Action</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 @section('script')
@@ -535,6 +635,14 @@
                                         0: {
                                             'title': 'Menunggu',
                                             'class': 'badge-light-warning'
+                                        },
+                                        '-1': {
+                                            'title': 'Ditolak SRM',
+                                            'class': 'badge-light-danger'
+                                        },
+                                        '-2': {
+                                            'title': 'Ditolak HTD',
+                                            'class': 'badge-light-danger'
                                         }
                                     };
                                     return `<span class="badge ${status[data].class}">${status[data].title}</span>`;
@@ -553,11 +661,14 @@
                                 className: 'text-end',
                                 render: function(data, type, row) {
                                     let handleApprove = '';
-                                    @if (auth()->user()->role_id == 4)
+                                    @if (auth()->user()->role_id == 4) // SRM role
                                         if (row.approve_by_htd == 0) {
                                             handleApprove = `
-                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline" data-kt-docs-table-filter="approve_row" data-id="${row.id}">
+                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline me-2" data-kt-docs-table-filter="approve_row" data-id="${row.id}">
                                             Approve
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-active-light-danger btn-sm btn-outline" data-kt-docs-table-filter="reject_row" data-id="${row.id}">
+                                            Reject
                                         </a>
                                     `;
                                         }
@@ -565,8 +676,11 @@
                                     @if (auth()->user()->role_id == 1) // HTD Admin role
                                         if (row.approve_by_htd == 1) {
                                             handleApprove = `
-                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline" data-kt-docs-table-filter="approve_htd_row" data-id="${row.id}">
+                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline me-2" data-kt-docs-table-filter="approve_htd_row" data-id="${row.id}">
                                             Approve HTD
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-active-light-danger btn-sm btn-outline" data-kt-docs-table-filter="reject_htd_row" data-id="${row.id}">
+                                            Reject HTD
                                         </a>
                                     `;
                                         }
@@ -612,10 +726,10 @@
                                     let handleLock = '';
                                     @if (auth()->user()->role_id == 1)
                                         handleLock = `
-    <a href="#" class="btn ${row.locked_at ? 'btn-success' : 'btn-danger'} btn-active-light-${row.locked_at ? 'success' : 'danger'} btn-sm btn-outline" data-kt-docs-table-filter="lock_row" data-id="${row.id}" data-locket="${row.locked_at || ''}">
-        ${row.locked_at ? '<i class="fas fa-lock-open"></i> Unlock' : '<i class="fas fa-lock"></i> Lock'}
-    </a>
-`;
+                                    <a href="#" class="btn ${row.locked_at ? 'btn-success' : 'btn-danger'} btn-active-light-${row.locked_at ? 'success' : 'danger'} btn-sm btn-outline" data-kt-docs-table-filter="lock_row" data-id="${row.id}" data-locket="${row.locked_at || ''}">
+                                        ${row.locked_at ? '<i class="fas fa-lock-open"></i> Unlock' : '<i class="fas fa-lock"></i> Lock'}
+                                    </a>
+                                `;
                                     @endif
                                     return `
                                     <div class="d-flex gap-3">
@@ -651,16 +765,9 @@
 
             // Handle edit button click
             var handleEditRows = () => {
-                // Remove any existing event handlers
-                $(document).off('click', '[data-kt-docs-table-filter="edit_row"]');
-                
-                // Add new event handler
                 $(document).on('click', '[data-kt-docs-table-filter="edit_row"]', function(e) {
                     e.preventDefault();
                     const id = $(this).data("id");
-                    // Show the modal
-                    $('#kt_modal').modal('show');
-                    // Call the detail function to load the data
                     KTForm.detail(id);
                 });
             }
@@ -843,6 +950,24 @@
             //     });
             // }
 
+            // Handle SRM reject button click 
+            var handleRejectRows = () => {
+                $(document).on('click', '[data-kt-docs-table-filter="reject_row"]', function(e) {
+                    e.preventDefault();
+                    const id = $(this).data("id");
+                    KTSRMReject.show(id);
+                });
+            }
+
+            // Handle HTD reject button click 
+            var handleRejectHtdRows = () => {
+                $(document).on('click', '[data-kt-docs-table-filter="reject_htd_row"]', function(e) {
+                    e.preventDefault();
+                    const id = $(this).data("id");
+                    KTHTDReject.show(id);
+                });
+            }
+
             // Public methods
             return {
                 init: function() {
@@ -852,6 +977,8 @@
                     handleDeleteRows();
                     handleApproveHtdRows();
                     handleApproveRows();
+                    handleRejectRows(); // Add this
+                    handleRejectHtdRows(); // Add this
                     handleLockRows();
                 },
                 refresh: function() {
@@ -868,123 +995,90 @@
 
             // Form validation rules
             var initValidation = function() {
-                validation = FormValidation.formValidation(
-                    form, {
-                        fields: {
-                            name: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Name is required'
-                                    }
-                                }
-                            },
-                            year: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Year is required'
-                                    },
-                                    numeric: {
-                                        message: 'Year must be numeric'
-                                    },
-                                    stringLength: {
-                                        min: 4,
-                                        max: 4,
-                                        message: 'Year must be exactly 4 digits'
-                                    },
-                                    between: {
-                                        min: (new Date().getFullYear() - 1),
-                                        max: (new Date().getFullYear() + 5),
-                                        message: 'Year must be between last year and 5 years from now'
-                                    }
-                                }
-                            },
-                            estimate_start_date: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Start date is required'
-                                    }
-                                }
-                            },
-                            estimate_end_date: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'End date is required'
-                                    }
-                                }
-                            },
-                            vendor_id: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Vendor is required'
-                                    }
-                                }
-                            },
-                            count_of_participant: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Count of participant is required'
-                                    },
-                                    numeric: {
-                                        message: 'Must be numeric'
-                                    },
-                                    greaterThan: {
-                                        min: 1,
-                                        message: 'Must be greater than 0'
-                                    }
-                                }
-                            },
-                            unit_id: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Unit is required'
-                                    }
-                                }
-                            },
-                            total_cost: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Total cost is required'
-                                    },
-                                    numeric: {
-                                        message: 'Must be numeric'
-                                    },
-                                    greaterThan: {
-                                        min: 0,
-                                        message: 'Must be greater than or equal to 0'
-                                    }
-                                }
-                            },
-                            diklat_type: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Jenis diklat is required'
-                                    }
-                                }
-                            },
-                            'area_ids[]': {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'At least one area must be selected'
-                                    }
-                                }
-                            },
-                            'tangible_benefit_categories[]': {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'At least one tangible benefit category is required'
-                                    }
+                validation = FormValidation.formValidation(form, {
+                    fields: {
+                        name: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Name is required'
                                 }
                             }
                         },
-                        plugins: {
-                            trigger: new FormValidation.plugins.Trigger(),
-                            bootstrap: new FormValidation.plugins.Bootstrap5({
-                                rowSelector: '.fv-row',
-                                eleInvalidClass: '',
-                                eleValidClass: ''
-                            })
-                        }
-                    });
+                        year: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Year is required'
+                                },
+                                numeric: {
+                                    message: 'Year must be numeric'
+                                }
+                            }
+                        },
+                        estimate_start_date: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Start date is required'
+                                }
+                            }
+                        },
+                        estimate_end_date: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'End date is required'
+                                }
+                            }
+                        },
+                        vendor_id: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vendor is required'
+                                }
+                            }
+                        },
+                        unit_id: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Unit is required'
+                                }
+                            }
+                        },
+                        count_of_participant: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Participant count is required'
+                                },
+                                numeric: {
+                                    message: 'Must be numeric'
+                                }
+                            }
+                        },
+                        total_cost: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Total cost is required'
+                                },
+                                numeric: {
+                                    message: 'Must be numeric'
+                                }
+                            }
+                        },
+                        'area_ids[]': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Bidang wajib dipilih'
+                                }
+                            }
+                        },
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap: new FormValidation.plugins.Bootstrap5({
+                            rowSelector: '.fv-row',
+                            eleInvalidClass: '',
+                            eleValidClass: ''
+                        })
+                    }
+                });
             }
 
             // Handle form submission
@@ -1007,15 +1101,6 @@
                                 formData.append('_method', method);
                             }
 
-                            // Handle tangible benefit categories
-                            const tangibleCategories = $('select[name="tangible_benefit_categories[]"]').val();
-                            formData.delete('tangible_benefit_categories[]');
-                            if (tangibleCategories) {
-                                tangibleCategories.forEach(category => {
-                                    formData.append('tangible_benefit_categories[]', category);
-                                });
-                            }
-
                             $.ajax({
                                 url: url,
                                 type: 'POST',
@@ -1023,21 +1108,26 @@
                                 processData: false,
                                 contentType: false,
                                 success: function(response) {
+                                    submitButton.removeAttribute('data-kt-indicator');
+                                    submitButton.disabled = false;
+
                                     if (response.status === 200) {
                                         Swal.fire({
                                             text: response.message,
                                             icon: "success",
                                             buttonsStyling: false,
-                                            confirmButtonText: "Ok",
+                                            confirmButtonText: "Ok!",
                                             customClass: {
                                                 confirmButton: "btn btn-primary"
                                             }
                                         }).then(function(result) {
                                             if (result.isConfirmed) {
-                                                // Reset form
-                                                resetForm();
                                                 $('#kt_modal').modal('hide');
-                                                dt.draw();
+                                                KTDatatablesServerSide
+                                                    .refresh();
+                                                @if (!$years->count())
+                                                    window.location.reload();
+                                                @endif
                                             }
                                         });
                                     }
@@ -1046,41 +1136,13 @@
                                     submitButton.removeAttribute('data-kt-indicator');
                                     submitButton.disabled = false;
 
-                                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                                        let errorMessages = [];
-                                        for (let key in xhr.responseJSON.errors) {
-                                            errorMessages.push(xhr.responseJSON.errors[key][0]);
-                                        }
-                                        Swal.fire({
-                                            text: errorMessages.join('\n'),
-                                            icon: "error",
-                                            buttonsStyling: false,
-                                            confirmButtonText: "Ok",
-                                            customClass: {
-                                                confirmButton: "btn btn-primary"
-                                            }
-                                        });
-                                    } else {
-                                        Swal.fire({
-                                            text: "An error occurred. Please try again.",
-                                            icon: "error",
-                                            buttonsStyling: false,
-                                            confirmButtonText: "Ok",
-                                            customClass: {
-                                                confirmButton: "btn btn-primary"
-                                            }
-                                        });
+                                    if (xhr.responseJSON?.errors) {
+                                        Object.keys(xhr.responseJSON.errors).forEach(
+                                            key => {
+                                                toastr.error(xhr.responseJSON
+                                                    .errors[key][0]);
+                                            });
                                     }
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                text: "Please fill in all required fields",
-                                icon: "error",
-                                buttonsStyling: false,
-                                confirmButtonText: "Ok",
-                                customClass: {
-                                    confirmButton: "btn btn-primary"
                                 }
                             });
                         }
@@ -1108,53 +1170,25 @@
                             resetForm();
                             $('.modal-title').html("Edit {{ $moduleName }}");
 
-                            // Fill in form data
                             $('input[name="id"]').val(data.id);
                             $('input[name="name"]').val(data.name);
                             $('input[name="year"]').val(data.year);
                             $('input[name="estimate_start_date"]').val(data.estimate_start_date);
                             $('input[name="estimate_end_date"]').val(data.estimate_end_date);
                             $('select[name="vendor_id"]').val(data.vendor_id).trigger('change');
-                            $('input[name="count_of_participant"]').val(data.count_of_participant);
                             $('select[name="unit_id"]').val(data.unit_id).trigger('change');
+                            $('input[name="count_of_participant"]').val(data.count_of_participant);
                             $('input[name="total_cost"]').val(data.total_cost);
+                            $('select[name="diklat_type"]').val(data.diklat_type).trigger('change');
 
-                            if (data.diklat_type) {
-                                $('select[name="diklat_type"]').val(data.diklat_type).trigger('change');
-                            }
-
-                            // Handle areas
-                            if (data.areas && Array.isArray(data.areas)) {
-                                $('select[name="area_ids[]"]').val(data.areas.map(a => a.id)).trigger('change');
-                            }
-
-                            // Handle tangible benefit categories
-                            if (data.tangible_benefit_categories) {
-                                let categories = data.tangible_benefit_categories;
-                                if (typeof categories === 'string') {
-                                    try {
-                                        categories = JSON.parse(categories);
-                                    } catch (e) {
-                                        console.error('Failed to parse tangible benefit categories:', e);
-                                        categories = [];
-                                    }
-                                }
-                                if (Array.isArray(categories)) {
-                                    setTimeout(() => {
-                                        $('select[name="tangible_benefit_categories[]"]').val(categories).trigger('change');
-                                    }, 100);
-                                }
-                            } else {
-                                $('select[name="tangible_benefit_categories[]"]').val([]).trigger('change');
+                            // Handle multiple area selection
+                            if (data.areas && data.areas.length > 0) {
+                                const areaIds = data.areas.map(area => area.id);
+                                $('select[name="area_ids[]"]').val(areaIds).trigger('change');
                             }
 
                             $('#kt_modal').modal('show');
-                        } else {
-                            toastr.error('Failed to load data. Please try again.');
                         }
-                    },
-                    error: function(xhr) {
-                        toastr.error('Failed to load data. Please try again.');
                     }
                 });
             }
@@ -1252,8 +1286,284 @@
                 }
             }
         }();
+
+        // SRM Reject Handler
+        var KTSRMReject = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_srm_reject_form');
+                submitButton = document.querySelector('#kt_srm_reject_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_srm_reject'));
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    submitButton.setAttribute('data-kt-indicator', 'on');
+                    submitButton.disabled = true;
+
+                    const planningId = document.querySelector('#srm_planning_id').value;
+                    const notes = form.querySelector('[name="notes"]').value;
+
+                    $.ajax({
+                        url: `${base_url}/diklat-planning/reject/${planningId}`,
+                        type: 'POST',
+                        data: {
+                            _token: csrf_token,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    text: response.message,
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                }).then(function() {
+                                    modal.hide();
+                                    form.reset();
+                                    KTDatatablesServerSide.refresh();
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (xhr.responseJSON?.errors) {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                },
+                show: function(planningId) {
+                    document.querySelector('#srm_planning_id').value = planningId;
+                    modal.show();
+                }
+            }
+        }();
+
+        // HTD Reject Handler
+        var KTHTDReject = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_htd_reject_form');
+                submitButton = document.querySelector('#kt_htd_reject_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_htd_reject'));
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    submitButton.setAttribute('data-kt-indicator', 'on');
+                    submitButton.disabled = true;
+
+                    const planningId = document.querySelector('#htd_planning_id').value;
+                    const notes = form.querySelector('[name="notes"]').value;
+
+                    $.ajax({
+                        url: `${base_url}/diklat-planning/reject-htd/${planningId}`,
+                        type: 'POST',
+                        data: {
+                            _token: csrf_token,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    text: response.message,
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                }).then(function() {
+                                    modal.hide();
+                                    form.reset();
+                                    KTDatatablesServerSide.refresh();
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (xhr.responseJSON?.errors) {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                },
+                show: function(planningId) {
+                    document.querySelector('#htd_planning_id').value = planningId;
+                    modal.show();
+                }
+            }
+        }();
+
+        // Bulk Actions Handler
+        var KTBulkActions = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_bulk_actions_form');
+                submitButton = document.querySelector('#kt_bulk_actions_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_bulk_actions'));
+
+                // Form validation
+                var validation = FormValidation.formValidation(form, {
+                    fields: {
+                        year: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Year is required'
+                                }
+                            }
+                        },
+                        action: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Action is required'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap: new FormValidation.plugins.Bootstrap5({
+                            rowSelector: '.fv-row',
+                            eleInvalidClass: '',
+                            eleValidClass: ''
+                        })
+                    }
+                });
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    validation.validate().then(function(status) {
+                        if (status === 'Valid') {
+                            const year = form.querySelector('[name="year"]').value;
+                            const action = form.querySelector('[name="action"]').value;
+                            const actionText = action === 'lock' ? 'lock' : 'unlock';
+                            const actionUrl = action === 'lock' ? 'bulk-lock' : 'bulk-unlock';
+
+                            Swal.fire({
+                                title: `Are you sure?`,
+                                text: `This will ${actionText} all diklat planning records for year ${year}`,
+                                icon: "warning",
+                                showCancelButton: true,
+                                buttonsStyling: false,
+                                confirmButtonText: `Yes, ${actionText} them!`,
+                                cancelButtonText: "No, cancel",
+                                customClass: {
+                                    confirmButton: `btn fw-bold btn-${action === 'lock' ? 'danger' : 'success'}`,
+                                    cancelButton: "btn fw-bold btn-active-light-primary"
+                                }
+                            }).then(function(result) {
+                                if (result.value) {
+                                    submitButton.setAttribute('data-kt-indicator', 'on');
+                                    submitButton.disabled = true;
+
+                                    $.ajax({
+                                        url: `${base_url}/diklat-planning/${actionUrl}`,
+                                        type: 'POST',
+                                        data: {
+                                            _token: csrf_token,
+                                            year: year
+                                        },
+                                        success: function(response) {
+                                            submitButton.removeAttribute('data-kt-indicator');
+                                            submitButton.disabled = false;
+
+                                            if (response.status === 200) {
+                                                Swal.fire({
+                                                    text: response.message,
+                                                    icon: "success",
+                                                    buttonsStyling: false,
+                                                    confirmButtonText: "Ok!",
+                                                    customClass: {
+                                                        confirmButton: "btn btn-primary"
+                                                    }
+                                                }).then(function() {
+                                                    modal.hide();
+                                                    form.reset();
+                                                    $('select').val(null).trigger('change');
+                                                    KTDatatablesServerSide.refresh();
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr) {
+                                            submitButton.removeAttribute('data-kt-indicator');
+                                            submitButton.disabled = false;
+
+                                            let message = 'An error occurred';
+                                            if (xhr.responseJSON?.message) {
+                                                message = xhr.responseJSON.message;
+                                            }
+
+                                            Swal.fire({
+                                                text: message,
+                                                icon: "error",
+                                                buttonsStyling: false,
+                                                confirmButtonText: "Ok!",
+                                                customClass: {
+                                                    confirmButton: "btn btn-primary"
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                }
+            }
+        }();
+
         KTUtil.onDOMContentLoaded(function() {
             KTHTDApproval.init();
+            KTSRMReject.init();
+            KTHTDReject.init();
+            KTBulkActions.init();
         });
         var handleApproveHtdRows = () => {
             $(document).on('click', '[data-kt-docs-table-filter="approve_htd_row"]', function(e) {

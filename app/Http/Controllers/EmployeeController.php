@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', 300); // 5 minutes
 
 use App\Exports\EmployeeTemplateExport;
 use App\Imports\EmployeesImport;
@@ -39,7 +41,10 @@ class EmployeeController extends Controller
         $searchValue = isset($search['value']) ? $search['value'] : null;
 
         $data = Employee::with(['unit', 'area'])
-            ->where('unit_id', $auth->unit_id)
+            // ->where('unit_id', $auth->unit_id)
+            ->when($auth->unit_id, function ($q) use ($auth) {
+                $q->where('unit_id', $auth->unit_id);
+            })
             ->when($searchValue, function ($q) use ($searchValue) {
                 $q->where(function ($query) use ($searchValue) {
                     $query->where('nip', 'like', '%' . $searchValue . '%')

@@ -16,8 +16,5 @@ class DatabaseSeeder extends Seeder
         $this->call(Lv1QuestionSeeder::class);
         $this->call(Lv3QuestionSeeder::class);
         $this->call(ManagerSeeder::class);
-        
-        // Uncomment this line to seed sample tangible benefit data
-        // $this->call(TangibleBenefitSeeder::class);
     }
 }

@@ -24,7 +24,7 @@ class VendorImport implements ToModel, WithValidation, WithHeadingRow
         $users = [
             'name' => 'Vendor ' . $vendor->name,
             'email' => str_replace(' ', '', strtolower($vendor->name)) . '@gmail.com',
-            'password' => Hash::make('pln#573*'),
+            'password' => bcrypt('pln#573*'),
             'role_id' => 2, // Assuming 2 is vendor role
             'vendor_id' => $vendor->id,
         ];

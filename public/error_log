@@ -23,3 +23,27 @@
 [22-May-2025 10:09:12 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/amaa8134/public_html/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php on line 61
 [22-May-2025 10:15:54 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/amaa8134/public_html/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php on line 61
 [22-May-2025 20:16:03 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/amaa8134/public_html/vendor/laravel/framework/src/Illuminate/Hashing/BcryptHasher.php on line 61
+[31-May-2025 22:19:08 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:19:08 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:19:08 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/amaa8134/public_html/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/amaa8134/public_html/public/index.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:20:44 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:20:44 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:20:44 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/amaa8134/public_html/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/amaa8134/public_html/public/index.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:21:57 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:21:57 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:21:57 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/amaa8134/public_html/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/amaa8134/public_html/public/index.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:22:10 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:22:10 Asia/Jakarta] PHP Warning:  require(/home/amaa8134/public_html/public/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/amaa8134/public_html/public/index.php on line 14
+[31-May-2025 22:22:10 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Failed opening required '/home/amaa8134/public_html/public/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/amaa8134/public_html/public/index.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/amaa8134/public_html/public/index.php on line 14
