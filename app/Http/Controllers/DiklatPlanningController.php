@@ -35,7 +35,10 @@ class DiklatPlanningController extends Controller
         $years = DiklatPlanning::select('year')
             ->when(in_array($roleId, [1]), function ($query) use ($unitId) {
                 // HTD hanya melihat data unit mereka
-                return $query->where('unit_id', $unitId);
+                if ($unitId) {
+                    return $query->where('unit_id', $unitId);
+                }
+                return $query;
             })
             ->when($roleId == 2, function ($query) {
                 // Vendor melihat data mereka sendiri
@@ -72,7 +75,10 @@ class DiklatPlanningController extends Controller
         // Filter data berdasarkan role
         $query->when(in_array($roleId, [1]), function ($query) use ($unitId) {
             // HTD hanya melihat data unit mereka
-            return $query->where('unit_id', $unitId);
+            if ($unitId) {
+                return $query->where('unit_id', $unitId);
+            }
+            return $query;
         })
             ->when($roleId == 2, function ($query) {
                 // Vendor melihat data mereka sendiri
@@ -83,6 +89,18 @@ class DiklatPlanningController extends Controller
                 return $query->whereHas('areas', function ($q) use ($areaId) {
                     $q->where('areas.id', $areaId);
                 });
+            })
+            ->when($roleId == 7, function ($query) {
+                // HTD melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($query) {
+                // Vice President melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
             });
 
         return datatables($query)
@@ -307,6 +325,69 @@ class DiklatPlanningController extends Controller
         ]);
     }
 
+
+    public function postReject(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string|min:10'
+        ], [
+            'notes.required' => 'Rejection notes are required',
+            'notes.min' => 'Notes must be at least 10 characters'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $diklatPlanning = DiklatPlanning::findOrFail($id);
+            $diklatPlanning->approve_by_htd = -1; // -1 means rejected by SRM
+            $diklatPlanning->notes = $request->notes;
+            $diklatPlanning->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Diklat planning rejected by SRM successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'An error occurred while rejecting the diklat planning'
+            ], 500);
+        }
+    }
+
+    public function postRejectHtd(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'notes' => 'required|string|min:10'
+        ], [
+            'notes.required' => 'Rejection notes are required',
+            'notes.min' => 'Notes must be at least 10 characters'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $diklatPlanning = DiklatPlanning::findOrFail($id);
+            $diklatPlanning->approve_by_htd = -2; // -2 means rejected by HTD
+            $diklatPlanning->notes = $request->notes;
+            $diklatPlanning->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Diklat planning rejected by HTD successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'An error occurred while rejecting the diklat planning'
+            ], 500);
+        }
+    }
+
     public function postUnlock(Request $request, $id)
     {
         $diklatPlanning = DiklatPlanning::findOrFail($id);
@@ -323,5 +404,95 @@ class DiklatPlanningController extends Controller
     {
         $year = $request->input('year');
         return Excel::download(new DiklatPlanningExport($year), 'Perencanaan Diklat ' . ($year && $year !== 'all' ? $year : '') . '.xlsx');
+    }
+
+    public function postBulkLock(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'year' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $roleId = Auth::user()->role_id;
+            $unitId = Auth::user()->unit_id;
+
+            // Only allow HTD Admin (role_id = 1) to perform bulk operations
+            if ($roleId !== 1) {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Unauthorized to perform this action'
+                ], 403);
+            }
+
+            $query = DiklatPlanning::where('year', $request->year);
+
+            // Filter by unit if HTD has specific unit
+            if ($unitId) {
+                $query->where('unit_id', $unitId);
+            }
+
+            $updatedCount = $query->whereNull('locked_at')->update([
+                'locked_at' => now()
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Successfully locked {$updatedCount} diklat planning records for year {$request->year}"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'An error occurred while locking the records'
+            ], 500);
+        }
+    }
+
+    public function postBulkUnlock(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'year' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $roleId = Auth::user()->role_id;
+            $unitId = Auth::user()->unit_id;
+
+            // Only allow HTD Admin (role_id = 1) to perform bulk operations
+            if ($roleId !== 1) {
+                return response()->json([
+                    'status' => 403,
+                    'message' => 'Unauthorized to perform this action'
+                ], 403);
+            }
+
+            $query = DiklatPlanning::where('year', $request->year);
+
+            // Filter by unit if HTD has specific unit
+            if ($unitId) {
+                $query->where('unit_id', $unitId);
+            }
+
+            $updatedCount = $query->whereNotNull('locked_at')->update([
+                'locked_at' => null
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Successfully unlocked {$updatedCount} diklat planning records for year {$request->year}"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'An error occurred while unlocking the records'
+            ], 500);
+        }
     }
 }

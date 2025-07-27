@@ -20,4 +20,9 @@ class Area extends Model
     {
         return $this->belongsToMany(Diklat::class, 'diklat_area');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -25,8 +25,19 @@ class ScoringProgressController extends Controller
         $d_1 = Diklat::query();
         if ($roleId == 2) {
             $d_1->where('vendor_id', Auth::user()->vendor_id);
+        } else if ($roleId == 8) {
+            // Vice President melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            $d_1->whereIn('unit_id', $unitIds ?? []);
         } else if ($roleId !== 7) {
             $d_1->where('unit_id', $unitId);
+        }
+        else if ($roleId == 7) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            $d_1->whereIn('unit_id', $unitIds ?? []);
         }
         $diklats = $d_1->get();
 

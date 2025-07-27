@@ -186,7 +186,13 @@
                             <div class="modal-footer">
                                 <button type="reset" class="btn btn-light btn-active-light-primary me-2"
                                     data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary" id="kt_export_submit">Submit</button>
+                                {{-- <button type="submit" class="btn btn-primary" id="kt_export_submit">Submit</button> --}}
+                                <button type="submit" class="btn btn-primary" id="kt_import_submit">
+                                    <span class="indicator-label">Submit</span>
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
                             </div>
                         </div>
                 </form>
@@ -196,7 +202,7 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{ asset('templates/vendor-import.js') }}"></script>
+    {{-- <script src="{{ asset('templates/vendor-import.js') }}"></script> --}}
     <script>
         "use strict";
         
@@ -522,8 +528,71 @@
         KTUtil.onDOMContentLoaded(function() {
             KTDatatablesServerSide.init();
             KTForm.init();
+            
+            $('#kt_export_form').on('submit', function(e) {
+                e.preventDefault();
 
-            console.log('{{ $moduleName }}');
+                const submitButton = document.querySelector('#kt_import_submit');
+                const form = this;
+                
+                // Show loading state
+                submitButton.setAttribute('data-kt-indicator', 'on');
+                submitButton.disabled = true;
+
+                var formData = new FormData(form);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                $.ajax({
+                    url: "{{ route('vendor.import') }}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Hide loading state
+                        submitButton.removeAttribute('data-kt-indicator');
+                        submitButton.disabled = false;
+
+                        if (response.status === 200) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function() {
+                                $('#kt_modal_import').modal('hide');
+                                $('#kt_export_form')[0].reset();
+                                KTDatatablesServerSide.refresh();
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        // Hide loading state
+                        submitButton.removeAttribute('data-kt-indicator');
+                        submitButton.disabled = false;
+
+                        if (xhr.responseJSON?.errors) {
+                            // Handle validation errors
+                            if (Array.isArray(xhr.responseJSON.errors)) {
+                                xhr.responseJSON.errors.forEach(error => {
+                                    toastr.error(error);
+                                });
+                            } else {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
+                            }
+                        } else if (xhr.responseJSON?.message) {
+                            toastr.error(xhr.responseJSON.message);
+                        } else {
+                            toastr.error('An error occurred during import');
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endsection

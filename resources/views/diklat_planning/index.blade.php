@@ -54,6 +54,16 @@
                             </a>
                             <!--end::Add data-->
 
+                            @if (auth()->user()->role_id == 1)
+                                <div class="btn-group me-3" role="group">
+                                    <a href="javascript:;" class="btn btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_bulk_actions">
+                                        <i class="fas fa-lock"></i>
+                                        Bulk Actions
+                                    </a>
+                                </div>
+                            @endif
+
                             <!--begin::Add data-->
                             @if (auth()->user()->role_id == 3)
                                 <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal"
@@ -393,6 +403,111 @@
         </div>
     </div>
 
+    </div>
+    <!-- SRM Reject Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_srm_reject">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">SRM Rejection Notes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_srm_reject_form" class="form">
+                    <div class="modal-body">
+                        <input type="hidden" name="planning_id" id="srm_planning_id">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Rejection Notes</label>
+                            <textarea name="notes" class="form-control" rows="4" placeholder="Enter rejection reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="kt_srm_reject_submit">
+                            <span class="indicator-label">Reject</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTD Reject Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_htd_reject">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">HTD Rejection Notes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_htd_reject_form" class="form">
+                    <div class="modal-body">
+                        <input type="hidden" name="planning_id" id="htd_planning_id">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Rejection Notes</label>
+                            <textarea name="notes" class="form-control" rows="4" placeholder="Enter rejection reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" id="kt_htd_reject_submit">
+                            <span class="indicator-label">Reject</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal fade" tabindex="-1" id="kt_modal_bulk_actions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Lock/Unlock Actions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="kt_bulk_actions_form" class="form">
+                    <div class="modal-body">
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Select Year</label>
+                            <select name="year" class="form-select" data-control="select2" data-placeholder="Select Year">
+                                <option></option>
+                                @foreach($years as $year)
+                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="fv-row mb-3">
+                            <label class="required fw-bold fs-6 mb-2">Action</label>
+                            <select name="action" class="form-select" data-control="select2" data-placeholder="Select Action">
+                                <option></option>
+                                <option value="lock">Lock All Records</option>
+                                <option value="unlock">Unlock All Records</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info">
+                            <strong>Note:</strong> This action will affect all diklat planning records for the selected year that you have permission to manage.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="kt_bulk_actions_submit">
+                            <span class="indicator-label">Execute Action</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 @section('script')
@@ -535,6 +650,14 @@
                                         0: {
                                             'title': 'Menunggu',
                                             'class': 'badge-light-warning'
+                                        },
+                                        '-1': {
+                                            'title': 'Ditolak SRM',
+                                            'class': 'badge-light-danger'
+                                        },
+                                        '-2': {
+                                            'title': 'Ditolak HTD',
+                                            'class': 'badge-light-danger'
                                         }
                                     };
                                     return `<span class="badge ${status[data].class}">${status[data].title}</span>`;
@@ -553,11 +676,14 @@
                                 className: 'text-end',
                                 render: function(data, type, row) {
                                     let handleApprove = '';
-                                    @if (auth()->user()->role_id == 4)
+                                    @if (auth()->user()->role_id == 4) // SRM role
                                         if (row.approve_by_htd == 0) {
                                             handleApprove = `
-                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline" data-kt-docs-table-filter="approve_row" data-id="${row.id}">
+                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline me-2" data-kt-docs-table-filter="approve_row" data-id="${row.id}">
                                             Approve
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-active-light-danger btn-sm btn-outline" data-kt-docs-table-filter="reject_row" data-id="${row.id}">
+                                            Reject
                                         </a>
                                     `;
                                         }
@@ -565,8 +691,11 @@
                                     @if (auth()->user()->role_id == 1) // HTD Admin role
                                         if (row.approve_by_htd == 1) {
                                             handleApprove = `
-                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline" data-kt-docs-table-filter="approve_htd_row" data-id="${row.id}">
+                                        <a href="#" class="btn btn-warning btn-active-light-primary btn-sm btn-outline me-2" data-kt-docs-table-filter="approve_htd_row" data-id="${row.id}">
                                             Approve HTD
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-active-light-danger btn-sm btn-outline" data-kt-docs-table-filter="reject_htd_row" data-id="${row.id}">
+                                            Reject HTD
                                         </a>
                                     `;
                                         }
@@ -612,10 +741,10 @@
                                     let handleLock = '';
                                     @if (auth()->user()->role_id == 1)
                                         handleLock = `
-    <a href="#" class="btn ${row.locked_at ? 'btn-success' : 'btn-danger'} btn-active-light-${row.locked_at ? 'success' : 'danger'} btn-sm btn-outline" data-kt-docs-table-filter="lock_row" data-id="${row.id}" data-locket="${row.locked_at || ''}">
-        ${row.locked_at ? '<i class="fas fa-lock-open"></i> Unlock' : '<i class="fas fa-lock"></i> Lock'}
-    </a>
-`;
+                                    <a href="#" class="btn ${row.locked_at ? 'btn-success' : 'btn-danger'} btn-active-light-${row.locked_at ? 'success' : 'danger'} btn-sm btn-outline" data-kt-docs-table-filter="lock_row" data-id="${row.id}" data-locket="${row.locked_at || ''}">
+                                        ${row.locked_at ? '<i class="fas fa-lock-open"></i> Unlock' : '<i class="fas fa-lock"></i> Lock'}
+                                    </a>
+                                `;
                                     @endif
                                     return `
                                     <div class="d-flex gap-3">
@@ -843,6 +972,24 @@
             //     });
             // }
 
+            // Handle SRM reject button click 
+            var handleRejectRows = () => {
+                $(document).on('click', '[data-kt-docs-table-filter="reject_row"]', function(e) {
+                    e.preventDefault();
+                    const id = $(this).data("id");
+                    KTSRMReject.show(id);
+                });
+            }
+
+            // Handle HTD reject button click 
+            var handleRejectHtdRows = () => {
+                $(document).on('click', '[data-kt-docs-table-filter="reject_htd_row"]', function(e) {
+                    e.preventDefault();
+                    const id = $(this).data("id");
+                    KTHTDReject.show(id);
+                });
+            }
+
             // Public methods
             return {
                 init: function() {
@@ -852,6 +999,8 @@
                     handleDeleteRows();
                     handleApproveHtdRows();
                     handleApproveRows();
+                    handleRejectRows(); // Add this
+                    handleRejectHtdRows(); // Add this
                     handleLockRows();
                 },
                 refresh: function() {
@@ -1023,12 +1172,15 @@
                                 processData: false,
                                 contentType: false,
                                 success: function(response) {
+                                    submitButton.removeAttribute('data-kt-indicator');
+                                    submitButton.disabled = false;
+
                                     if (response.status === 200) {
                                         Swal.fire({
                                             text: response.message,
                                             icon: "success",
                                             buttonsStyling: false,
-                                            confirmButtonText: "Ok",
+                                            confirmButtonText: "Ok!",
                                             customClass: {
                                                 confirmButton: "btn btn-primary"
                                             }
@@ -1252,8 +1404,284 @@
                 }
             }
         }();
+
+        // SRM Reject Handler
+        var KTSRMReject = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_srm_reject_form');
+                submitButton = document.querySelector('#kt_srm_reject_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_srm_reject'));
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    submitButton.setAttribute('data-kt-indicator', 'on');
+                    submitButton.disabled = true;
+
+                    const planningId = document.querySelector('#srm_planning_id').value;
+                    const notes = form.querySelector('[name="notes"]').value;
+
+                    $.ajax({
+                        url: `${base_url}/diklat-planning/reject/${planningId}`,
+                        type: 'POST',
+                        data: {
+                            _token: csrf_token,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    text: response.message,
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                }).then(function() {
+                                    modal.hide();
+                                    form.reset();
+                                    KTDatatablesServerSide.refresh();
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (xhr.responseJSON?.errors) {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                },
+                show: function(planningId) {
+                    document.querySelector('#srm_planning_id').value = planningId;
+                    modal.show();
+                }
+            }
+        }();
+
+        // HTD Reject Handler
+        var KTHTDReject = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_htd_reject_form');
+                submitButton = document.querySelector('#kt_htd_reject_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_htd_reject'));
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    submitButton.setAttribute('data-kt-indicator', 'on');
+                    submitButton.disabled = true;
+
+                    const planningId = document.querySelector('#htd_planning_id').value;
+                    const notes = form.querySelector('[name="notes"]').value;
+
+                    $.ajax({
+                        url: `${base_url}/diklat-planning/reject-htd/${planningId}`,
+                        type: 'POST',
+                        data: {
+                            _token: csrf_token,
+                            notes: notes
+                        },
+                        success: function(response) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    text: response.message,
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok!",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                }).then(function() {
+                                    modal.hide();
+                                    form.reset();
+                                    KTDatatablesServerSide.refresh();
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            submitButton.removeAttribute('data-kt-indicator');
+                            submitButton.disabled = false;
+
+                            if (xhr.responseJSON?.errors) {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                },
+                show: function(planningId) {
+                    document.querySelector('#htd_planning_id').value = planningId;
+                    modal.show();
+                }
+            }
+        }();
+
+        // Bulk Actions Handler
+        var KTBulkActions = function() {
+            var form;
+            var submitButton;
+            var modal;
+
+            var initForm = function() {
+                form = document.querySelector('#kt_bulk_actions_form');
+                submitButton = document.querySelector('#kt_bulk_actions_submit');
+                modal = new bootstrap.Modal(document.querySelector('#kt_modal_bulk_actions'));
+
+                // Form validation
+                var validation = FormValidation.formValidation(form, {
+                    fields: {
+                        year: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Year is required'
+                                }
+                            }
+                        },
+                        action: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Action is required'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap: new FormValidation.plugins.Bootstrap5({
+                            rowSelector: '.fv-row',
+                            eleInvalidClass: '',
+                            eleValidClass: ''
+                        })
+                    }
+                });
+
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    validation.validate().then(function(status) {
+                        if (status === 'Valid') {
+                            const year = form.querySelector('[name="year"]').value;
+                            const action = form.querySelector('[name="action"]').value;
+                            const actionText = action === 'lock' ? 'lock' : 'unlock';
+                            const actionUrl = action === 'lock' ? 'bulk-lock' : 'bulk-unlock';
+
+                            Swal.fire({
+                                title: `Are you sure?`,
+                                text: `This will ${actionText} all diklat planning records for year ${year}`,
+                                icon: "warning",
+                                showCancelButton: true,
+                                buttonsStyling: false,
+                                confirmButtonText: `Yes, ${actionText} them!`,
+                                cancelButtonText: "No, cancel",
+                                customClass: {
+                                    confirmButton: `btn fw-bold btn-${action === 'lock' ? 'danger' : 'success'}`,
+                                    cancelButton: "btn fw-bold btn-active-light-primary"
+                                }
+                            }).then(function(result) {
+                                if (result.value) {
+                                    submitButton.setAttribute('data-kt-indicator', 'on');
+                                    submitButton.disabled = true;
+
+                                    $.ajax({
+                                        url: `${base_url}/diklat-planning/${actionUrl}`,
+                                        type: 'POST',
+                                        data: {
+                                            _token: csrf_token,
+                                            year: year
+                                        },
+                                        success: function(response) {
+                                            submitButton.removeAttribute('data-kt-indicator');
+                                            submitButton.disabled = false;
+
+                                            if (response.status === 200) {
+                                                Swal.fire({
+                                                    text: response.message,
+                                                    icon: "success",
+                                                    buttonsStyling: false,
+                                                    confirmButtonText: "Ok!",
+                                                    customClass: {
+                                                        confirmButton: "btn btn-primary"
+                                                    }
+                                                }).then(function() {
+                                                    modal.hide();
+                                                    form.reset();
+                                                    $('select').val(null).trigger('change');
+                                                    KTDatatablesServerSide.refresh();
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr) {
+                                            submitButton.removeAttribute('data-kt-indicator');
+                                            submitButton.disabled = false;
+
+                                            let message = 'An error occurred';
+                                            if (xhr.responseJSON?.message) {
+                                                message = xhr.responseJSON.message;
+                                            }
+
+                                            Swal.fire({
+                                                text: message,
+                                                icon: "error",
+                                                buttonsStyling: false,
+                                                confirmButtonText: "Ok!",
+                                                customClass: {
+                                                    confirmButton: "btn btn-primary"
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initForm();
+                }
+            }
+        }();
+
         KTUtil.onDOMContentLoaded(function() {
             KTHTDApproval.init();
+            KTSRMReject.init();
+            KTHTDReject.init();
+            KTBulkActions.init();
         });
         var handleApproveHtdRows = () => {
             $(document).on('click', '[data-kt-docs-table-filter="approve_htd_row"]', function(e) {

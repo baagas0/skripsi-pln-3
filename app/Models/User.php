@@ -25,6 +25,7 @@ class User extends Authenticatable
         'area_id',
         'vendor_id',
         'unit_id',
+        'manage_unit_ids',
     ];
 
     /**
@@ -47,6 +48,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'manage_unit_ids' => 'json',
         ];
     }
 
@@ -58,5 +60,15 @@ class User extends Authenticatable
     public function area()
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
     }
 }

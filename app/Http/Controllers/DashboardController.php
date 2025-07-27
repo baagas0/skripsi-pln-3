@@ -49,6 +49,18 @@ class DashboardController extends Controller
                         });
                     }
                     return $q;
+                })
+                ->when($roleId == 7, function ($q) {
+                    // Filter for HTD role - only show data from their unit
+                    $unitIdsString = Auth::user()->manage_unit_ids;
+                    $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                    return $q->whereIn('unit_id', $unitIds ?? []);
+                })
+                ->when($roleId == 8, function ($q) {
+                    // Filter for Vice President role - only show data from their unit
+                    $unitIdsString = Auth::user()->manage_unit_ids;
+                    $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                    return $q->whereIn('unit_id', $unitIds ?? []);
                 });
         };
 
