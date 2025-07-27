@@ -1,39 +1,38 @@
 <html>
-    @include('layouts.head')
+@include('layouts.head')
 
-    <body>        @php
-            $levelLabels = [
-                'all' => 'Semua Level Penilaian',
-                '1' => 'Level 1 - Reaction',
-                '2' => 'Level 2 - Learning',
-                '3' => 'Level 3 - Behavior',
-                '4' => 'Level 4 - Result',
-                '5' => 'Level 5 - Return On Training Investment'
-            ];
-            
-            $selectedLevelLabels = [];
-            foreach ($selectedLevels as $lvl) {
-                if (isset($levelLabels[$lvl])) {
-                    $selectedLevelLabels[] = $levelLabels[$lvl];
-                }
-            }
-            
-            $currentLevelLabel = $showAllLevels 
-                ? 'Semua Level Penilaian' 
-                : implode(', ', $selectedLevelLabels);
-            
-            // Get diklat name
-            $diklat = \App\Models\Diklat::find($diklatId);
-            $diklatName = $diklat ? $diklat->name : 'Pelatihan';
-        @endphp
-        
-        <div class="text-center mb-5">
-            <h2>Laporan Penilaian Pelatihan</h2>
-            <h3>{{ $diklatName }}</h3>
-            <h4>{{ $currentLevelLabel }}</h4>
-        </div>
-        
-        <div class="">            @if($showAllLevels || in_array('1', $selectedLevels))
+<body> @php
+    $levelLabels = [
+        'all' => 'Semua Level Penilaian',
+        '1' => 'Level 1 - Reaction',
+        '2' => 'Level 2 - Learning',
+        '3' => 'Level 3 - Behavior',
+        '4' => 'Level 4 - Result',
+        '5' => 'Level 5 - Return On Training Investment',
+    ];
+
+    $selectedLevelLabels = [];
+    foreach ($selectedLevels as $lvl) {
+        if (isset($levelLabels[$lvl])) {
+            $selectedLevelLabels[] = $levelLabels[$lvl];
+        }
+    }
+
+    $currentLevelLabel = $showAllLevels ? 'Semua Level Penilaian' : implode(', ', $selectedLevelLabels);
+
+    // Get diklat name
+    $diklat = \App\Models\Diklat::find($diklatId);
+    $diklatName = $diklat ? $diklat->name : 'Pelatihan';
+@endphp
+
+    <div class="text-center mb-5">
+        <h2>Laporan Penilaian Pelatihan</h2>
+        <h3>{{ $diklatName }}</h3>
+        <h4>{{ $currentLevelLabel }}</h4>
+    </div>
+
+    <div class="">
+        @if ($showAllLevels || in_array('1', $selectedLevels))
             <div class="mb-6">
                 <div class="mb-6">
                     <h3>Level 1 - Reaction</h3>
@@ -47,18 +46,21 @@
                     <div id="scoreList2" style="height: 350px;"></div>
                 </div>
             </div>
-            @endif            @if($showAllLevels || in_array('2', $selectedLevels))
+        @endif
+        @if ($showAllLevels || in_array('2', $selectedLevels))
             <div class="mb-6">
                 <div class="mb-6">
                     <h3>Level 2 - Learning</h3>
                 </div>
                 <table>
                     <tr class="p-3">
-                        <td class="p-3" style="width: 200px; background-color: #3699FF">Rata-rata Nilai Pre-Test</td>
+                        <td class="p-3" style="width: 200px; background-color: #3699FF">Rata-rata Nilai Pre-Test
+                        </td>
                         <td style="width: 80px; text-align: center">{{ $avgPretest }}</td>
                     </tr>
                     <tr class="p-3">
-                        <td class="p-3" style="width: 200px; background-color: #0BB7AF">Rata-rata Nilai Post-Test</td>
+                        <td class="p-3" style="width: 200px; background-color: #0BB7AF">Rata-rata Nilai Post-Test
+                        </td>
                         <td style="width: 80px; text-align: center">{{ $avgPosttest }}</td>
                     </tr>
                     <tr class="p-3">
@@ -67,7 +69,8 @@
                     </tr>
                 </table>
             </div>
-            @endif            @if($showAllLevels || in_array('3', $selectedLevels))
+        @endif
+        @if ($showAllLevels || in_array('3', $selectedLevels))
             <div class="mb-6">
                 <div class="mb-6">
                     <h3>Level 3 - Behavior</h3>
@@ -75,359 +78,422 @@
 
                 <table class="table table-borderless">
                     <tr>
-                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align:middle">Kategori</td>
-                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">Rentang Nilai</td>
-                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">Jumlah Peserta</td>
+                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align:middle">
+                            Kategori</td>
+                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">
+                            Rentang
+                            Nilai</td>
+                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">
+                            Jumlah
+                            Peserta</td>
                     </tr>
                     @foreach ($scoreList3Result as $item)
-                    <tr>
-                        <td class="p-3" style="vertical-align: middle">{{ $item['name'] }}</td>
-                        <td class="p-3" style="vertical-align: middle">{{ $item['range'] }}</td>
-                        <td class="p-3" style="vertical-align: middle">{{ $item['count'] }}</td>
-                    </tr>
+                        <tr>
+                            <td class="p-3" style="vertical-align: middle">{{ $item['name'] }}</td>
+                            <td class="p-3" style="vertical-align: middle">{{ $item['range'] }}</td>
+                            <td class="p-3" style="vertical-align: middle">{{ $item['count'] }}</td>
+                        </tr>
                     @endforeach
                     <tr>
-                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">Total</td>
+                        <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle">Total
+                        </td>
                         <td class="p-3" style="width: 300px; background-color: #3699FF; vertical-align: middle"></td>
-                        <td class="p-3 d-flex justify-content-between align-items-center" style="width: 100%; background-color: #3699FF; vertical-align: middle">
+                        <td class="p-3 d-flex justify-content-between align-items-center"
+                            style="width: 100%; background-color: #3699FF; vertical-align: middle">
                             {{ $scoreList3Result->sum('count') }}
                         </td>
                     </tr>
                 </table>
             </div>
-            @endif            @if($showAllLevels || in_array('4', $selectedLevels))
+        @endif
+        @if ($showAllLevels || in_array('4', $selectedLevels))
             <div class="mb-6">
                 <div class="mb-6">
                     <h3>Level 4 - Result</h3>
                 </div>
-                <p>1. Program pelatihan ini <span class="text-primary fw-bold fs-4">{{ $score4Label }}</span> pada unit.</p>
-                <p>2. Program pelatihan ini berdampak bagi peserta pada aspek <span class="text-primary">{{ implode(',', $score4Impacts) }}</span></p>
+                <p>1. Program pelatihan ini <span class="text-primary fw-bold fs-4">{{ $score4Label }}</span> pada
+                    unit.</p>
+                <p>2. Program pelatihan ini berdampak bagi peserta pada aspek <span
+                        class="text-primary">{{ implode(',', $score4Impacts) }}</span></p>
 
                 <table class="table table-bordered">
                     <tr>
-                        <td style="text-align: center; background-color: #3699FF" colspan="2">Tangible Benefits</td>
+                        <td style="text-align: center; background-color: #3699FF" colspan="2">Tangible
+                            Benefits</td>
                     </tr>
                     <tr>
-                        <td style="text-align: center; background-color: #0BB7AF">Tangible Returns Categories</td>
+                        <td style="text-align: center; background-color: #0BB7AF">Tangible Returns
+                            Categories</td>
                         <td style="text-align: center; background-color: #0BB7AF">Total</td>
                     </tr>
                     @foreach ($score4Tangibles as $item)
-                    <tr>
-                        <td style="width: 300px">{{ $item->category }}</td>
-                        <td style="width: 100%; display: flex; justify-content: space-between">
-                            <span>Rp.</span>
-                            <span>{{ number_format($item->cost, 2) }}</span>
-                        </td>
-                    </tr>
-                    @if(isset($item->detailsData) && $item->detailsData->count() > 0)
-                    <tr>
-                        <td colspan="2" style="padding-left: 20px;">
-                            <div style="font-size: 12px;">
-                                <strong>Calculation Breakdown:</strong>
-                                <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Component</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Sub-Component</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Operator</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f2f2f2;">Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if(isset($item->componentGroups))
-                                        @foreach($item->componentGroups as $componentName => $details)
-                                            @foreach($details as $index => $detail)
+                        <tr>
+                            <td style="width: 300px">{{ $item->category }}</td>
+                            <td style="width: 100%; display: flex; justify-content: space-between">
+                                <span>Rp.</span>
+                                <span>{{ number_format($item->cost, 2) }}</span>
+                            </td>
+                        </tr>
+                        @if (isset($item->detailsData) && $item->detailsData->count() > 0)
+                            <tr>
+                                <td colspan="2" style="padding-left: 20px;">
+                                    <div style="font-size: 12px;">
+                                        <strong>Calculation Breakdown:</strong>
+                                        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                                            <thead>
                                                 <tr>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">
-                                                        @if($index == 0){{ $componentName }}@endif
-                                                    </td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">{{ $detail->sub_component_name ?: '-' }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: center;">{{ $detail->operator }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: right;">Rp. {{ number_format($detail->price, 2) }}</td>
+                                                    <th
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">
+                                                        Component</th>
+                                                    <th
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">
+                                                        Sub-Component</th>
+                                                    <th
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">
+                                                        Operator</th>
+                                                    <th
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f2f2f2;">
+                                                        Price</th>
                                                 </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="3" style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">Subtotal:</td>
-                                                <td style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f8f9fa; font-weight: bold;">
-                                                    <?php
-                                                        // Calculate subtotal for this component
-                                                        $subtotal = 0;
-                                                        $mainPrice = 0;
-                                                        $firstDetail = $details->first();
-                                                        $steps = [];
-                                                        
-                                                        if ($firstDetail) {
-                                                            $mainPrice = $firstDetail->price;
-                                                            $subtotal = $mainPrice;
-                                                            $steps[] = $mainPrice;
-                                                        }
-                                                        
-                                                        // Build formula for display
-                                                        $formula = $componentName;
-                                                        if (!empty($firstDetail->sub_component_name)) {
-                                                            $formula .= " [{$firstDetail->sub_component_name}]";
-                                                        }
-                                                        $formula .= ": Rp. " . number_format($mainPrice, 2);
-                                                        
-                                                        foreach ($details as $index => $detail) {
-                                                            if ($index > 0) { // Skip the first one as it's the base
-                                                                $formula .= " {$detail->operator} ";
+                                            </thead>
+                                            <tbody>
+                                                @if (isset($item->componentGroups))
+                                                    @foreach ($item->componentGroups as $componentName => $details)
+                                                        @foreach ($details as $index => $detail)
+                                                            <tr>
+                                                                <td style="border: 1px solid #ddd; padding: 5px;">
+                                                                    @if ($index == 0)
+                                                                        {{ $componentName }}
+                                                                    @endif
+                                                                </td>
+                                                                <td style="border: 1px solid #ddd; padding: 5px;">
+                                                                    {{ $detail->sub_component_name ?: '-' }}
+                                                                </td>
+                                                                <td
+                                                                    style="border: 1px solid #ddd; padding: 5px; text-align: center;">
+                                                                    {{ $detail->operator }}</td>
+                                                                <td
+                                                                    style="border: 1px solid #ddd; padding: 5px; text-align: right;">
+                                                                    Rp.
+                                                                    {{ number_format($detail->price, 2) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        <tr>
+                                                            <td colspan="3"
+                                                                style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">
+                                                                Subtotal:</td>
+                                                            <td
+                                                                style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f8f9fa; font-weight: bold;">
+                                                                <?php
+                                                                // Calculate subtotal for this component
+                                                                $subtotal = 0;
+                                                                $mainPrice = 0;
+                                                                $firstDetail = $details->first();
+                                                                $steps = [];
                                                                 
-                                                                if (!empty($detail->sub_component_name)) {
-                                                                    $formula .= "{$detail->sub_component_name} (";
+                                                                if ($firstDetail) {
+                                                                    $mainPrice = $firstDetail->price;
+                                                                    $subtotal = $mainPrice;
+                                                                    $steps[] = $mainPrice;
                                                                 }
                                                                 
-                                                                $formula .= "Rp. " . number_format($detail->price, 2);
-                                                                
-                                                                if (!empty($detail->sub_component_name)) {
-                                                                    $formula .= ")";
+                                                                // Build formula for display
+                                                                $formula = $componentName;
+                                                                if (!empty($firstDetail->sub_component_name)) {
+                                                                    $formula .= " [{$firstDetail->sub_component_name}]";
                                                                 }
+                                                                $formula .= ': Rp. ' . number_format($mainPrice, 2);
                                                                 
-                                                                switch ($detail->operator) {
-                                                                    case '*':
-                                                                        $subtotal *= $detail->price;
-                                                                        break;
-                                                                    case '+':
-                                                                        $subtotal += $detail->price;
-                                                                        break;
-                                                                    case '-':
-                                                                        $subtotal -= $detail->price;
-                                                                        break;
-                                                                    case '/':
-                                                                        if ($detail->price != 0) {
-                                                                            $subtotal /= $detail->price;
-                                                                        } else {
-                                                                            $formula .= " (⚠️ division by zero)";
+                                                                foreach ($details as $index => $detail) {
+                                                                    if ($index > 0) {
+                                                                        // Skip the first one as it's the base
+                                                                        $formula .= " {$detail->operator} ";
+                                                                
+                                                                        if (!empty($detail->sub_component_name)) {
+                                                                            $formula .= "{$detail->sub_component_name} (";
                                                                         }
-                                                                        break;
+                                                                
+                                                                        $formula .= 'Rp. ' . number_format($detail->price, 2);
+                                                                
+                                                                        if (!empty($detail->sub_component_name)) {
+                                                                            $formula .= ')';
+                                                                        }
+                                                                
+                                                                        switch ($detail->operator) {
+                                                                            case '*':
+                                                                                $subtotal *= $detail->price;
+                                                                                break;
+                                                                            case '+':
+                                                                                $subtotal += $detail->price;
+                                                                                break;
+                                                                            case '-':
+                                                                                $subtotal -= $detail->price;
+                                                                                break;
+                                                                            case '/':
+                                                                                if ($detail->price != 0) {
+                                                                                    $subtotal /= $detail->price;
+                                                                                } else {
+                                                                                    $formula .= ' (⚠️ division by zero)';
+                                                                                }
+                                                                                break;
+                                                                        }
+                                                                
+                                                                        $steps[] = $subtotal;
+                                                                    }
                                                                 }
                                                                 
-                                                                $steps[] = $subtotal;
-                                                            }
-                                                        }
-                                                        
-                                                        $formula .= " = Rp. " . number_format($subtotal, 2);
-                                                        
-                                                        echo 'Rp. ' . number_format($subtotal, 2);
-                                                    ?>
-                                                    
-                                                    <?php if (count($steps) > 1): ?>
-                                                        <div style="font-size: 8pt; color: #666; margin-top: 3px;">
-                                                            <?php echo $formula; ?>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        @php
-                                            // Group details by component_name (fallback if componentGroups not set)
-                                            $componentGroups = $item->detailsData->groupBy('component_name');
-                                        @endphp
-                                        
-                                        @foreach($componentGroups as $componentName => $details)
-                                            @foreach($details as $index => $detail)
+                                                                $formula .= ' = Rp. ' . number_format($subtotal, 2);
+                                                                
+                                                                echo 'Rp. ' . number_format($subtotal, 2);
+                                                                ?>
+
+                                                                <?php if (count($steps) > 1): ?>
+                                                                <div
+                                                                    style="font-size: 8pt; color: #666; margin-top: 3px;">
+                                                                    <?php echo $formula; ?>
+                                                                </div>
+                                                                <?php endif; ?>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
+                                                    @php
+                                                        // Group details by component_name (fallback if componentGroups not set)
+                                                        $componentGroups = $item->detailsData->groupBy(
+                                                            'component_name',
+                                                        );
+                                                    @endphp
+
+                                                    @foreach ($componentGroups as $componentName => $details)
+                                                        @foreach ($details as $index => $detail)
+                                                            <tr>
+                                                                <td style="border: 1px solid #ddd; padding: 5px;">
+                                                                    @if ($index == 0)
+                                                                        {{ $componentName }}
+                                                                    @endif
+                                                                </td>
+                                                                <td style="border: 1px solid #ddd; padding: 5px;">
+                                                                    {{ $detail->sub_component_name ?: '-' }}
+                                                                </td>
+                                                                <td
+                                                                    style="border: 1px solid #ddd; padding: 5px; text-align: center;">
+                                                                    {{ $detail->operator }}</td>
+                                                                <td
+                                                                    style="border: 1px solid #ddd; padding: 5px; text-align: right;">
+                                                                    Rp.
+                                                                    {{ number_format($detail->price, 2) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                            <tfoot>
                                                 <tr>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">
-                                                        @if($index == 0){{ $componentName }}@endif
+                                                    <td colspan="3"
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">
+                                                        Total for {{ $item->category }}:</td>
+                                                    <td
+                                                        style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #e9ecef; font-weight: bold;">
+                                                        Rp. {{ number_format($item->cost, 2) }}
                                                     </td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">{{ $detail->sub_component_name ?: '-' }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: center;">{{ $detail->operator }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: right;">Rp. {{ number_format($detail->price, 2) }}</td>
                                                 </tr>
-                                            @endforeach
-                                        @endforeach
-                                    @endif
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">Total for {{ $item->category }}:</td>
-                                            <td style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #e9ecef; font-weight: bold;">
-                                                Rp. {{ number_format($item->cost, 2) }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                    @endif
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
                 </table>
             </div>
-            @endif            @if($showAllLevels || in_array('5', $selectedLevels))
+        @endif
+        @if ($showAllLevels || in_array('5', $selectedLevels))
             <div class="mb-6">
                 <div class="mb-6">
                     <h3>Level 5 - Return On Training Investment</h3>
                 </div>
 
-                @if($score5)
+                @if ($score5)
                     <table class="mb-3">
                         <tr class="p-3">
-                            <td class="p-3" style="width: 400px; background-color: #3699FF">Total Benefits</td>
-                            <td style="width: 150px; text-align: center">Rp. {{ number_format($score5->total_tangible, 2) }}</td>
+                            <td class="p-3" style="width: 400px; background-color: #3699FF">Total
+                                Benefits</td>
+                            <td style="width: 150px; text-align: center">Rp.
+                                {{ number_format($score5->total_tangible, 2) }}</td>
                         </tr>
                         <tr class="p-3">
-                            <td class="p-3" style="width: 400px; background-color: #0BB7AF">Total Cost</td>
-                            <td style="width: 150px; text-align: center">Rp. {{ number_format($score5->cost_of_training, 2) }}</td>
+                            <td class="p-3" style="width: 400px; background-color: #0BB7AF">Total Cost
+                            </td>
+                            <td style="width: 150px; text-align: center">Rp.
+                                {{ number_format($score5->cost_of_training, 2) }}</td>
                         </tr>
                         <tr class="p-3">
-                            <td class="p-3" style="width: 400px; background-color: #3699FF">Return On Training Investment</td>
+                            <td class="p-3" style="width: 400px; background-color: #3699FF">Return On
+                                Training Investment</td>
                             <td style="width: 150px; text-align: center">{{ $score5->roti }}%</td>
                         </tr>
                     </table>
 
-                    <p>Untuk setiap rupiah yang dikeluarkan dalam pelatihan, pemberi kerja mendapatkan kembali sebesar <span class="text-primary">Rp. {{ number_format($score5->roti, 2) }}</span> dalam bentuk manfaat dari <span class="text-primary">{{ implode(',', $score4Impacts) }}</span></p>
+                    <p>Untuk setiap rupiah yang dikeluarkan dalam pelatihan, pemberi kerja mendapatkan
+                        kembali sebesar <span class="text-primary">Rp.
+                            {{ number_format($score5->roti, 2) }}</span> dalam bentuk manfaat dari <span
+                            class="text-primary">{{ implode(',', $score4Impacts) }}</span></p>
                 @endif
             </div>
-            @endif
-        </div>
+        @endif
+    </div>
 
-    </body>
-    @include('layouts.script')
-    <script>
-        "use strict";
+</body>
+@include('layouts.script')
+<script>
+    "use strict";
 
-        var report = function () {
-            const level_1_reaction = () => {
-                var element = document.getElementById('scoreList1');
-                var element2 = document.getElementById('scoreList2');
+    var report = function() {
+        const level_1_reaction = () => {
+            var element = document.getElementById('scoreList1');
+            var element2 = document.getElementById('scoreList2');
 
-                if (!element || !element2) {
-                    return;
-                }
+            if (!element || !element2) {
+                return;
+            }
 
-                var height = parseInt(KTUtil.css(element, 'height'));
-                var height2 = parseInt(KTUtil.css(element2, 'height'));
+            var height = parseInt(KTUtil.css(element, 'height'));
+            var height2 = parseInt(KTUtil.css(element2, 'height'));
 
-                var options = {
-                    series: @json($scoreList1),
-                    chart: {
-                        fontFamily: 'inherit',
-                        type: 'bar',
-                        height: height,
-                        toolbar: {
-                            show: false
-                        }
+            var options = {
+                series: @json($scoreList1),
+                chart: {
+                    fontFamily: 'inherit',
+                    type: 'bar',
+                    height: height,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: ['30%'],
+                        endingShape: 'rounded'
                     },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: ['30%'],
-                            endingShape: 'rounded'
-                        },
+                },
+                legend: {
+                    show: true // Changed to true to show series names
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: @json($scoreList1), // Static categories for x-axis
+                    axisBorder: {
+                        show: false,
                     },
-                    legend: {
-                        show: true // Changed to true to show series names
+                    axisTicks: {
+                        show: false
                     },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
-                    },
-                    xaxis: {
-                        categories: @json($scoreList1), // Static categories for x-axis
-                        axisBorder: {
-                            show: false,
-                        },
-                        axisTicks: {
-                            show: false
-                        },
-                        labels: {
-                            style: {
-                                colors: '#787878', // Static color for x-axis labels
-                                fontSize: '12px'
-                            }
-                        }
-                    },
-                    yaxis: {
-                        labels: {
-                            style: {
-                                colors: '#787878', // Static color for y-axis labels
-                                fontSize: '12px'
-                            }
-                        }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    states: {
-                        normal: {
-                            filter: {
-                                type: 'none',
-                                value: 0
-                            }
-                        },
-                        hover: {
-                            filter: {
-                                type: 'none',
-                                value: 0
-                            }
-                        },
-                        active: {
-                            allowMultipleDataPointsSelection: false,
-                            filter: {
-                                type: 'none',
-                                value: 0
-                            }
-                        }
-                    },
-                    tooltip: {
+                    labels: {
                         style: {
+                            colors: '#787878', // Static color for x-axis labels
                             fontSize: '12px'
-                        },
-                        y: {
-                            formatter: function (val) {
-                                return val + ' peserta'
-                            }
-                        }
-                    },
-                    colors: [
-                        '#3699FF',  // Blue
-                        '#F64E60',  // Red
-                        '#1BC5BD',  // Green
-                        '#8950FC',  // Purple
-                        '#0BB7AF'   // Young Blue (Teal)
-                    ], // Static colors for bars
-                    grid: {
-                        borderColor: '#E4E6EF', // Static border color
-                        strokeDashArray: 4,
-                        yaxis: {
-                            lines: {
-                                show: true
-                            }
                         }
                     }
-                };
-
-                var chart = new ApexCharts(element, options);
-                chart.render();
-
-                var option2 = { ...options };
-                option2.chart.height = height2;
-                option2.series = @json($scoreList2);
-                option2.xaxis.categories = @json($scoreList2Category); // Static categories for x-axis
-                option2.colors = [
-                    '#FF5733',  // Red
-                    '#33FF57',  // Green
-                    '#3357FF',  // Blue
-                    '#F1C40F',  // Yellow
-                    '#8E44AD'   // Purple
-                ]; // Static colors for bars
-                var chart2 = new ApexCharts(element2, option2);
-                chart2.render();
-            };
-            return {
-                init: function () {
-                    level_1_reaction();
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            colors: '#787878', // Static color for y-axis labels
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                states: {
+                    normal: {
+                        filter: {
+                            type: 'none',
+                            value: 0
+                        }
+                    },
+                    hover: {
+                        filter: {
+                            type: 'none',
+                            value: 0
+                        }
+                    },
+                    active: {
+                        allowMultipleDataPointsSelection: false,
+                        filter: {
+                            type: 'none',
+                            value: 0
+                        }
+                    }
+                },
+                tooltip: {
+                    style: {
+                        fontSize: '12px'
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val + ' peserta'
+                        }
+                    }
+                },
+                colors: [
+                    '#3699FF', // Blue
+                    '#F64E60', // Red
+                    '#1BC5BD', // Green
+                    '#8950FC', // Purple
+                    '#0BB7AF' // Young Blue (Teal)
+                ], // Static colors for bars
+                grid: {
+                    borderColor: '#E4E6EF', // Static border color
+                    strokeDashArray: 4,
+                    yaxis: {
+                        lines: {
+                            show: true
+                        }
+                    }
                 }
             };
-        }();
 
-        KTUtil.onDOMContentLoaded(function () {
-            report.init();
-        });
-    </script>
+            var chart = new ApexCharts(element, options);
+            chart.render();
+
+            var option2 = {
+                ...options
+            };
+            option2.chart.height = height2;
+            option2.series = @json($scoreList2);
+            option2.xaxis.categories = @json($scoreList2Category); // Static categories for x-axis
+            option2.colors = [
+                '#FF5733', // Red
+                '#33FF57', // Green
+                '#3357FF', // Blue
+                '#F1C40F', // Yellow
+                '#8E44AD' // Purple
+            ]; // Static colors for bars
+            var chart2 = new ApexCharts(element2, option2);
+            chart2.render();
+        };
+        return {
+            init: function() {
+                level_1_reaction();
+            }
+        };
+    }();
+
+    KTUtil.onDOMContentLoaded(function() {
+        report.init();
+    });
+</script>
+
 </html>
