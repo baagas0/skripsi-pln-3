@@ -302,18 +302,6 @@ $moduleRoute = 'diklat';
                                 </select>
                             </div>
                         </div>
-
-                        <div class="row mb-6">
-                            <label class="col-lg-4 col-form-label required fw-bold fs-6">Kategori Tangible Benefit</label>
-                            <div class="col-lg-8 fv-row">
-                                <select name="tangible_benefit_categories[]" class="form-select" data-control="select2" data-placeholder="Pilih Kategori Tangible Benefit" multiple>
-                                    <option value="Penghematan Biaya Bahan">Penghematan Biaya Bahan</option>
-                                    <option value="Pengurangan Biaya Project">Pengurangan Biaya Project</option>
-                                    <option value="Penghematan Waktu">Penghematan Waktu</option>
-                                    <option value="Penurunan Biaya Pembelian">Penurunan Biaya Pembelian</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -958,26 +946,6 @@ var detailForm = function(id) {
                 $('input[name="year"]').val(data.year).removeAttr('readonly');
                 $('input[name="estimate_start_date"]').val(data.estimate_start_date).removeAttr('readonly');
                 $('input[name="estimate_end_date"]').val(data.estimate_end_date).removeAttr('readonly');
-                
-                // Handle tangible benefit categories
-                if (data.tangible_benefit_categories) {
-                    let categories = data.tangible_benefit_categories;
-                    if (typeof categories === 'string') {
-                        try {
-                            categories = JSON.parse(categories);
-                        } catch (e) {
-                            console.error('Failed to parse tangible benefit categories:', e);
-                            categories = [];
-                        }
-                    }
-                    if (Array.isArray(categories)) {
-                        setTimeout(() => {
-                            $('select[name="tangible_benefit_categories[]"]').val(categories).trigger('change');
-                        }, 100);
-                    }
-                } else {
-                    $('select[name="tangible_benefit_categories[]"]').val([]).trigger('change');
-                }
                 
                 $('select[name="vendor_id"]').val(data.vendor_id).trigger('change');
                 

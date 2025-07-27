@@ -21,14 +21,14 @@ class UnitSeeder extends Seeder
         User::create([
             'name' => 'HTD Pusertif',
             'email' => 'pusertif@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 1, // HTD role
             'unit_id' => $pusertif->id,
         ]);
         User::create([
             'name' => 'HoE Pusertif',
             'email' => 'hoe.pusertif@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 6, // HoE role
             'unit_id' => $pusertif->id,
         ]);
@@ -64,14 +64,14 @@ class UnitSeeder extends Seeder
         User::create([
             'name' => 'HTD Puslitbang',
             'email' => 'puslitbang@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 1, // HTD role
             'unit_id' => $puslitbang->id,
         ]);
         User::create([
             'name' => 'HoE puslitbang',
             'email' => 'hoe.puslitbang@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 6, // HoE role
             'unit_id' => $puslitbang->id,
         ]);
@@ -104,14 +104,14 @@ class UnitSeeder extends Seeder
         User::create([
             'name' => 'HTD UIP JBT',
             'email' => 'uip.jbt@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 1, // HTD role
             'unit_id' => $uip_jbt->id,
         ]);
         User::create([
             'name' => 'HoE UIP JBT',
             'email' => 'hoe.uip.jbt@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 6, // HoE role
             'unit_id' => $uip_jbt->id,
         ]);
@@ -164,14 +164,14 @@ class UnitSeeder extends Seeder
         User::create([
             'name' => 'HTD PUSHARLIS',
             'email' => 'pusharlis@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 1, // HTD role
             'unit_id' => $pusharlis->id,
         ]);
         User::create([
             'name' => 'HoE PUSHARLIS',
             'email' => 'hoe.pusharlis@pln.co.id',
-            'password' => bcrypt('pln#573*'),
+            'password' => bcrypt('password'),
             'role_id' => 6, // HoE role
             'unit_id' => $pusharlis->id,
         ]);
@@ -222,7 +222,7 @@ class UnitSeeder extends Seeder
             // Create PIC for each area
             $users[] = [
                 'name' => 'PIC ' . $area->name . ' (' . $area->unit->name . ')',
-                'password' => bcrypt('pln#573*'),
+                'password' => bcrypt('password'),
                 'role_id' => 3, // PIC Bidang role
                 'area_id' => $area->id,
                 'email' => str_replace(' ', '_', strtolower($area->unit->name)) . '-pic-' . str_replace(' ', '_', strtolower($area->name)) . '@gmail.com',
@@ -231,7 +231,7 @@ class UnitSeeder extends Seeder
             // Create SRM for each area
             $users[] = [
                 'name' => 'SRM ' . $area->name . ' (' . $area->unit->name . ')',
-                'password' => bcrypt('pln#573*'),
+                'password' => bcrypt('password'),
                 'role_id' => 4, // SRM role
                 'area_id' => $area->id,
                 'email' => str_replace(' ', '_', strtolower($area->unit->name)) . '-srm-' . str_replace(' ', '_', strtolower($area->name)) . '@gmail.com',

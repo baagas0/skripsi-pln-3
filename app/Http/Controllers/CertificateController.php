@@ -60,6 +60,18 @@ class CertificateController extends Controller
             ->when($roleId == 2, function ($q) {
                 // Filter for Vendor role
                 $q->where('certificates.vendor_id', Auth::user()->vendor_id);
+            })
+            ->when($roleId == 7, function ($q) {
+                // Filter for Admin role
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $q->whereIn('diklats.unit_id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($q) {
+                // Filter for Vice President role
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $q->whereIn('diklats.unit_id', $unitIds ?? []);
             });
 
         return datatables($query)

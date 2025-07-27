@@ -9,12 +9,26 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Illuminate\Support\Facades\Auth;
 
 class UnitsMasterSheet implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize
 {
     public function collection()
     {
+        $roleId = Auth::user()->role_id;
         return Area::with('unit')
+            ->when($roleId == 7, function ($query) {
+                // HTD melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($query) {
+                // HTD melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
+            })
             ->get()
             ->map(function ($area) {
                 return [

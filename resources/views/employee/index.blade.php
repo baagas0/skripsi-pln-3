@@ -56,21 +56,21 @@
 
                             <!--begin::Add data-->
                             @if (auth()->user()->role_id !== 7)
-                            <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal"
-                                onclick="KTForm.resetForm();">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
-                                            rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
-                                            fill="black" />
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                Tambah {{ $moduleName }}
-                            </a>
+                                <a href="javascript:;" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal" onclick="KTForm.resetForm();">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+                                    <span class="svg-icon svg-icon-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
+                                                rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+                                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
+                                                fill="black" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    Tambah {{ $moduleName }}
+                                </a>
                             @endif
                             <!--end::Add data-->
                         </div>
@@ -142,28 +142,31 @@
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">NIP</label>
                                 <div class="col-lg-8 fv-row">
-                                    <input type="text" name="nip" class="form-control" placeholder="Nomor Induk Pegawai" />
+                                    <input type="text" name="nip" class="form-control"
+                                        placeholder="Nomor Induk Pegawai" />
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Nama</label>
                                 <div class="col-lg-8 fv-row">
-                                    <input type="text" name="name" class="form-control" placeholder="Nama Pegawai" />
+                                    <input type="text" name="name" class="form-control"
+                                        placeholder="Nama Pegawai" />
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Jabatan</label>
                                 <div class="col-lg-8 fv-row">
                                     <input type="text" name="position" class="form-control" placeholder="Jabatan" />
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Unit</label>
                                 <div class="col-lg-8 fv-row">
-                                    <select name="unit_id" class="form-select" data-control="select2" data-placeholder="Pilih Unit">
+                                    <select name="unit_id" class="form-select" data-control="select2"
+                                        data-placeholder="Pilih Unit">
                                         <option></option>
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit->id }}">{{ $unit->name }}</option>
@@ -171,23 +174,24 @@
                                     </select>
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Bidang</label>
                                 <div class="col-lg-8 fv-row">
-                                    <select name="area_id" class="form-select" data-control="select2" data-placeholder="Pilih Bidang">
+                                    <select name="area_id" class="form-select" data-control="select2"
+                                        data-placeholder="Pilih Bidang">
                                         <option></option>
                                     </select>
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Email</label>
                                 <div class="col-lg-8 fv-row">
                                     <input type="email" name="email" class="form-control" placeholder="Email" />
                                 </div>
                             </div>
-                
+
                             <div class="row mb-6">
                                 <label class="col-lg-4 col-form-label required fw-bold fs-6">Tanggal Lahir</label>
                                 <div class="col-lg-8 fv-row">
@@ -197,9 +201,10 @@
                         </div>
                         <!--end::Card body-->
                     </div>
-                
+
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Batal</button>
+                        <button type="reset" class="btn btn-light btn-active-light-primary me-2"
+                            data-bs-dismiss="modal">Batal</button>
                         <button type="button" class="btn btn-primary" id="kt_data_submit">Simpan</button>
                     </div>
                 </form>
@@ -236,10 +241,16 @@
                                 Download template <a href="{{ route('employee.template') }}">here</a>
                             </div>
 
+                            
                             <div class="modal-footer">
                                 <button type="reset" class="btn btn-light btn-active-light-primary me-2"
                                     data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary" id="">Submit</button>
+                                <button type="submit" class="btn btn-primary" id="kt_import_submit">
+                                    <span class="indicator-label">Submit</span>
+                                    <span class="indicator-progress">Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
                             </div>
                         </div>
                 </form>
@@ -249,102 +260,102 @@
     </div>
 @endsection
 @section('script')
-<script>
-    "use strict";
+    <script>
+        "use strict";
 
-    const areas = @json($areas);
+        const areas = @json($areas);
 
-    function reRenderAreas(unitId) {
-        const select = $('select[name="area_id"]');
-        select.empty();
-        select.append('<option></option>');
-        areas.filter((x) => x.unit_id == unitId).forEach(function(area) {
-            select.append('<option value="' + area.id + '">' + area.name + '</option>');
-        });
-    }
+        function reRenderAreas(unitId) {
+            const select = $('select[name="area_id"]');
+            select.empty();
+            select.append('<option></option>');
+            areas.filter((x) => x.unit_id == unitId).forEach(function(area) {
+                select.append('<option value="' + area.id + '">' + area.name + '</option>');
+            });
+        }
 
-    // Class definition for DataTable handling
-    var KTDatatablesServerSide = function() {
-        var table;
-        var dt;
+        // Class definition for DataTable handling
+        var KTDatatablesServerSide = function() {
+            var table;
+            var dt;
 
-        // Initialize DataTable
-        var initDatatable = function() {
-            dt = $("#kt_datatable").DataTable({
-                responsive: true,
-                searchDelay: 500,
-                processing: true,
-                serverSide: true,
-                pageLength: 10,
-                order: [
-                    [0, 'desc']
-                ],
-                stateSave: true,
-                select: {
-                    style: 'os',
-                    selector: 'td:first-child',
-                    className: 'row-selected'
-                },
-                ajax: {
-                    url: "{{ route($moduleRoute . '.data') }}",
-                },
-                columns: [
-                    // {
-                    //     data: 'id'
-                    // },
-                    {
-                        data: 'nip'
+            // Initialize DataTable
+            var initDatatable = function() {
+                dt = $("#kt_datatable").DataTable({
+                    responsive: true,
+                    searchDelay: 500,
+                    processing: true,
+                    serverSide: true,
+                    pageLength: 10,
+                    order: [
+                        [0, 'desc']
+                    ],
+                    stateSave: true,
+                    select: {
+                        style: 'os',
+                        selector: 'td:first-child',
+                        className: 'row-selected'
                     },
-                    {
-                        data: 'name'
+                    ajax: {
+                        url: "{{ route($moduleRoute . '.data') }}",
                     },
-                    {
-                        data: 'position'
-                    },
-                    {
-                        data: 'unit.name'
-                    },
-                    {
-                        data: 'area.name'
-                    },
-                    {
-                        data: 'email'
-                    },
-                    {
-                        data: 'birth_date'
-                    },
-                    {
-                        data: null
-                    }
-                ],
-                columnDefs: [
-                    // {
-                    //     targets: 0,
-                    //     orderable: false,
-                    //     render: function(data) {
-                    //         return `
+                    columns: [
+                        // {
+                        //     data: 'id'
+                        // },
+                        {
+                            data: 'nip'
+                        },
+                        {
+                            data: 'name'
+                        },
+                        {
+                            data: 'position'
+                        },
+                        {
+                            data: 'unit.name'
+                        },
+                        {
+                            data: 'area.name'
+                        },
+                        {
+                            data: 'email'
+                        },
+                        {
+                            data: 'birth_date'
+                        },
+                        {
+                            data: null
+                        }
+                    ],
+                    columnDefs: [
+                        // {
+                        //     targets: 0,
+                        //     orderable: false,
+                        //     render: function(data) {
+                        //         return `
                     //         <div class="form-check form-check-sm form-check-custom form-check-solid">
                     //             <input class="form-check-input" type="checkbox" value="${data}" />
                     //         </div>`;
-                    //     }
-                    // },
-                    {
-                        // Format birth date column
-                        targets: 6,
-                        render: function(data) {
-                            return moment(data).format('DD MMM YYYY');
-                        }
-                    },
-                    {
-                        targets: -1,
-                        data: null,
-                        orderable: false,
-                        className: 'text-end',
-                        render: function(data, type, row) {
-                            @if (auth()->user()->role_id == 7)
-                            return '';
-                            @endif
-                            return `
+                        //     }
+                        // },
+                        {
+                            // Format birth date column
+                            targets: 6,
+                            render: function(data) {
+                                return moment(data).format('DD MMM YYYY');
+                            }
+                        },
+                        {
+                            targets: -1,
+                            data: null,
+                            orderable: false,
+                            className: 'text-end',
+                            render: function(data, type, row) {
+                                @if (auth()->user()->role_id == 7)
+                                    return '';
+                                @endif
+                                return `
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
                                 Actions
                                 <span class="svg-icon svg-icon-5 m-0">
@@ -365,340 +376,376 @@
                                     </a>
                                 </div>
                             </div>`;
+                            }
                         }
-                    }
-                ]
-            });
-
-            table = dt.$;
-
-            // Re-init functions on every table re-draw
-            dt.on('draw', function() {
-                // initToggleToolbar();
-                // toggleToolbars();
-                handleEditRows();
-                handleDeleteRows();
-                KTMenu.createInstances();
-            });
-        }
-
-        // Search functionality
-        var handleSearchDatatable = function() {
-            const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
-            filterSearch?.addEventListener('keyup', function(e) {
-                dt.search(e.target.value).draw();
-            });
-        }
-
-        // Handle edit button click
-        var handleEditRows = () => {
-            const editButtons = document.querySelectorAll('[data-kt-docs-table-filter="edit_row"]');
-
-            editButtons.forEach(d => {
-                d.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const id = $(this).data("id");
-                    KTForm.detail(id);
+                    ]
                 });
-            });
-        }
 
-        // Handle delete button click 
-        var handleDeleteRows = () => {
-            const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
+                table = dt.$;
 
-            deleteButtons.forEach(d => {
-                d.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const id = $(this).data("id");
+                // Re-init functions on every table re-draw
+                dt.on('draw', function() {
+                    // initToggleToolbar();
+                    // toggleToolbars();
+                    handleEditRows();
+                    handleDeleteRows();
+                    KTMenu.createInstances();
+                });
+            }
 
-                    Swal.fire({
-                        text: "Are you sure you want to delete this employee?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        buttonsStyling: false,
-                        confirmButtonText: "Yes, delete!",
-                        cancelButtonText: "No, cancel",
-                        customClass: {
-                            confirmButton: "btn fw-bold btn-danger",
-                            cancelButton: "btn fw-bold btn-active-light-primary"
-                        }
-                    }).then(function(result) {
-                        if (result.value) {
-                            $.ajax({
-                                url: `${base_url}/{{ $moduleRoute }}/destroy/${id}`,
-                                type: 'DELETE',
-                                data: {
-                                    _token: csrf_token
+            // Search functionality
+            var handleSearchDatatable = function() {
+                const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
+                filterSearch?.addEventListener('keyup', function(e) {
+                    dt.search(e.target.value).draw();
+                });
+            }
+
+            // Handle edit button click
+            var handleEditRows = () => {
+                const editButtons = document.querySelectorAll('[data-kt-docs-table-filter="edit_row"]');
+
+                editButtons.forEach(d => {
+                    d.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const id = $(this).data("id");
+                        KTForm.detail(id);
+                    });
+                });
+            }
+
+            // Handle delete button click 
+            var handleDeleteRows = () => {
+                const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
+
+                deleteButtons.forEach(d => {
+                    d.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const id = $(this).data("id");
+
+                        Swal.fire({
+                            text: "Are you sure you want to delete this employee?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            buttonsStyling: false,
+                            confirmButtonText: "Yes, delete!",
+                            cancelButtonText: "No, cancel",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-danger",
+                                cancelButton: "btn fw-bold btn-active-light-primary"
+                            }
+                        }).then(function(result) {
+                            if (result.value) {
+                                $.ajax({
+                                    url: `${base_url}/{{ $moduleRoute }}/destroy/${id}`,
+                                    type: 'DELETE',
+                                    data: {
+                                        _token: csrf_token
+                                    },
+                                    success: function(response) {
+                                        Swal.fire({
+                                            text: "Employee deleted successfully!",
+                                            icon: "success",
+                                            buttonsStyling: false,
+                                            confirmButtonText: "Ok!",
+                                            customClass: {
+                                                confirmButton: "btn fw-bold btn-primary"
+                                            }
+                                        }).then(function() {
+                                            dt.draw();
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Public methods
+            return {
+                init: function() {
+                    initDatatable();
+                    handleSearchDatatable();
+                    handleEditRows();
+                    handleDeleteRows();
+                },
+                refresh: function() {
+                    dt.draw();
+                }
+            }
+        }();
+
+        // Form handling class
+        var KTForm = function() {
+            var form;
+            var submitButton;
+            var validation;
+
+            // Form validation rules
+            var initValidation = function() {
+                validation = FormValidation.formValidation(form, {
+                    fields: {
+                        nip: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'NIP is required'
+                                }
+                            }
+                        },
+                        name: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Name is required'
+                                }
+                            }
+                        },
+                        position: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Position is required'
+                                }
+                            }
+                        },
+                        unit_id: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Unit is required'
+                                }
+                            }
+                        },
+                        area_id: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Area is required'
+                                }
+                            }
+                        },
+                        email: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Email is required'
                                 },
+                                emailAddress: {
+                                    message: 'The value is not a valid email address'
+                                }
+                            }
+                        },
+                        birth_date: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Birth date is required'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap: new FormValidation.plugins.Bootstrap5({
+                            rowSelector: '.fv-row',
+                            eleInvalidClass: '',
+                            eleValidClass: ''
+                        })
+                    }
+                });
+            }
+
+            // Handle form submission
+            var handleForm = function() {
+                submitButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    validation.validate().then(function(status) {
+                        if (status === 'Valid') {
+                            submitButton.setAttribute('data-kt-indicator', 'on');
+                            submitButton.disabled = true;
+
+                            var id = $('input[name="id"]').val();
+                            var method = id ? 'POST' : 'POST';
+                            var url = id ? `${base_url}/{{ $moduleRoute }}/update/${id}` :
+                                `${base_url}/{{ $moduleRoute }}/store`;
+
+                            var formData = new FormData(form);
+                            if (id) {
+                                formData.append('_method', method);
+                            }
+
+                            $.ajax({
+                                url: url,
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
                                 success: function(response) {
-                                    Swal.fire({
-                                        text: "Employee deleted successfully!",
-                                        icon: "success",
-                                        buttonsStyling: false,
-                                        confirmButtonText: "Ok!",
-                                        customClass: {
-                                            confirmButton: "btn fw-bold btn-primary"
-                                        }
-                                    }).then(function() {
-                                        dt.draw();
-                                    });
+                                    submitButton.removeAttribute('data-kt-indicator');
+                                    submitButton.disabled = false;
+
+                                    if (response.status === 200) {
+                                        Swal.fire({
+                                            text: response.message,
+                                            icon: "success",
+                                            buttonsStyling: false,
+                                            confirmButtonText: "Ok!",
+                                            customClass: {
+                                                confirmButton: "btn btn-primary"
+                                            }
+                                        }).then(function(result) {
+                                            if (result.isConfirmed) {
+                                                $('#kt_modal').modal('hide');
+                                                KTDatatablesServerSide
+                                            .refresh();
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr) {
+                                    submitButton.removeAttribute('data-kt-indicator');
+                                    submitButton.disabled = false;
+
+                                    if (xhr.responseJSON?.errors) {
+                                        Object.keys(xhr.responseJSON.errors).forEach(
+                                            key => {
+                                                toastr.error(xhr.responseJSON
+                                                    .errors[key][0]);
+                                            });
+                                    }
                                 }
                             });
                         }
                     });
                 });
-            });
-        }
-
-        // Public methods
-        return {
-            init: function() {
-                initDatatable();
-                handleSearchDatatable();
-                handleEditRows();
-                handleDeleteRows();
-            },
-            refresh: function() {
-                dt.draw();
             }
-        }
-    }();
 
-    // Form handling class
-    var KTForm = function() {
-        var form;
-        var submitButton;
-        var validation;
+            // Reset form
+            var resetForm = function() {
+                form.reset();
+                $('.modal-title').html("Add New Employee");
+                $('input[name="id"]').val("");
+                $('select').val(null).trigger('change');
+            }
 
-        // Form validation rules
-        var initValidation = function() {
-            validation = FormValidation.formValidation(form, {
-                fields: {
-                    nip: {
-                        validators: {
-                            notEmpty: {
-                                message: 'NIP is required'
-                            }
-                        }
-                    },
-                    name: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Name is required'
-                            }
-                        }
-                    },
-                    position: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Position is required'
-                            }
-                        }
-                    },
-                    unit_id: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Unit is required'
-                            }
-                        }
-                    },
-                    area_id: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Area is required'
-                            }
-                        }
-                    },
-                    email: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Email is required'
-                            },
-                            emailAddress: {
-                                message: 'The value is not a valid email address'
-                            }
-                        }
-                    },
-                    birth_date: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Birth date is required'
-                            }
+            // Load data for editing
+            var detailForm = function(id) {
+                $.ajax({
+                    url: `${base_url}/{{ $moduleRoute }}/show/${id}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.status === 200) {
+                            const data = response.data;
+
+                            resetForm();
+                            $('.modal-title').html("Edit {{ $moduleName }}");
+
+                            $('input[name="id"]').val(data.id);
+                            $('input[name="nip"]').val(data.nip);
+                            $('input[name="name"]').val(data.name);
+                            $('input[name="position"]').val(data.position);
+                            $('select[name="unit_id"]').val(data.unit_id).trigger('change');
+                            reRenderAreas(data.unit_id + '');
+                            setTimeout(() => {
+                                $('select[name="area_id"]').val(data.area_id).trigger('change');
+                            }, 500);
+                            $('input[name="email"]').val(data.email);
+                            $('input[name="birth_date"]').val(data.birth_date);
+
+                            $('#kt_modal').modal('show');
                         }
                     }
+                });
+            }
+
+            // Public methods
+            return {
+                init: function() {
+                    console.log('init')
+                    form = document.querySelector('#kt_data_form');
+                    console.log('init2', form)
+                    submitButton = form.querySelector('#kt_data_submit');
+
+                    initValidation();
+                    handleForm();
                 },
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    bootstrap: new FormValidation.plugins.Bootstrap5({
-                        rowSelector: '.fv-row',
-                        eleInvalidClass: '',
-                        eleValidClass: ''
-                    })
+                detail: detailForm,
+                resetForm: resetForm
+            }
+        }();
+
+        // Initialize on document ready
+        KTUtil.onDOMContentLoaded(function() {
+            KTDatatablesServerSide.init();
+            KTForm.init();
+
+            $('select[name="unit_id"]').on('change', function() {
+                var unitId = $(this).val();
+                if (unitId) {
+                    reRenderAreas(unitId);
                 }
             });
-        }
 
-        // Handle form submission
-        var handleForm = function() {
-            submitButton.addEventListener('click', function(e) {
+            $('#kt_export_form').on('submit', function(e) {
                 e.preventDefault();
 
-                validation.validate().then(function(status) {
-                    if (status === 'Valid') {
-                        submitButton.setAttribute('data-kt-indicator', 'on');
-                        submitButton.disabled = true;
+                const submitButton = document.querySelector('#kt_import_submit');
+                const form = this;
+                
+                // Show loading state
+                submitButton.setAttribute('data-kt-indicator', 'on');
+                submitButton.disabled = true;
 
-                        var id = $('input[name="id"]').val();
-                        var method = id ? 'POST' : 'POST';
-                        var url = id ? `${base_url}/{{ $moduleRoute }}/update/${id}` :
-                            `${base_url}/{{ $moduleRoute }}/store`;
+                var formData = new FormData(form);
+                formData.append('_token', '{{ csrf_token() }}');
 
-                        var formData = new FormData(form);
-                        if (id) {
-                            formData.append('_method', method);
+                $.ajax({
+                    url: "{{ route('employee.import') }}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        // Hide loading state
+                        submitButton.removeAttribute('data-kt-indicator');
+                        submitButton.disabled = false;
+
+                        if (response.status === 200) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function() {
+                                $('#kt_modal_import').modal('hide');
+                                $('#kt_export_form')[0].reset();
+                                KTDatatablesServerSide.refresh();
+                            });
                         }
+                    },
+                    error: function(xhr) {
+                        // Hide loading state
+                        submitButton.removeAttribute('data-kt-indicator');
+                        submitButton.disabled = false;
 
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function(response) {
-                                submitButton.removeAttribute('data-kt-indicator');
-                                submitButton.disabled = false;
-
-                                if (response.status === 200) {
-                                    Swal.fire({
-                                        text: response.message,
-                                        icon: "success",
-                                        buttonsStyling: false,
-                                        confirmButtonText: "Ok!",
-                                        customClass: {
-                                            confirmButton: "btn btn-primary"
-                                        }
-                                    }).then(function(result) {
-                                        if (result.isConfirmed) {
-                                            $('#kt_modal').modal('hide');
-                                            KTDatatablesServerSide.refresh();
-                                        }
-                                    });
-                                }
-                            },
-                            error: function(xhr) {
-                                submitButton.removeAttribute('data-kt-indicator');
-                                submitButton.disabled = false;
-
-                                if (xhr.responseJSON?.errors) {
-                                    Object.keys(xhr.responseJSON.errors).forEach(
-                                        key => {
-                                            toastr.error(xhr.responseJSON
-                                                .errors[key][0]);
-                                        });
-                                }
+                        if (xhr.responseJSON?.errors) {
+                            // Handle validation errors
+                            if (Array.isArray(xhr.responseJSON.errors)) {
+                                xhr.responseJSON.errors.forEach(error => {
+                                    toastr.error(error);
+                                });
+                            } else {
+                                Object.keys(xhr.responseJSON.errors).forEach(key => {
+                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                                });
                             }
-                        });
+                        } else if (xhr.responseJSON?.message) {
+                            toastr.error(xhr.responseJSON.message);
+                        } else {
+                            toastr.error('An error occurred during import');
+                        }
                     }
                 });
             });
-        }
-
-        // Reset form
-        var resetForm = function() {
-            form.reset();
-            $('.modal-title').html("Add New Employee");
-            $('input[name="id"]').val("");
-            $('select').val(null).trigger('change');
-        }
-
-        // Load data for editing
-        var detailForm = function(id) {
-            $.ajax({
-                url: `${base_url}/{{ $moduleRoute }}/show/${id}`,
-                type: 'GET',
-                success: function(response) {
-                    if (response.status === 200) {
-                        const data = response.data;
-
-                        resetForm();
-                        $('.modal-title').html("Edit {{ $moduleName }}");
-
-                        $('input[name="id"]').val(data.id);
-                        $('input[name="nip"]').val(data.nip);
-                        $('input[name="name"]').val(data.name);
-                        $('input[name="position"]').val(data.position);
-                        $('select[name="unit_id"]').val(data.unit_id).trigger('change');
-                        reRenderAreas(data.unit_id + '');
-                        setTimeout(() => {
-                            $('select[name="area_id"]').val(data.area_id).trigger('change');
-                        }, 500);
-                        $('input[name="email"]').val(data.email);
-                        $('input[name="birth_date"]').val(data.birth_date);
-
-                        $('#kt_modal').modal('show');
-                    }
-                }
-            });
-        }
-
-        // Public methods
-        return {
-            init: function() {
-                console.log('init')
-                form = document.querySelector('#kt_data_form');
-                console.log('init2', form)
-                submitButton = form.querySelector('#kt_data_submit');
-
-                initValidation();
-                handleForm();
-            },
-            detail: detailForm,
-            resetForm: resetForm
-        }
-    }();
-
-    // Initialize on document ready
-    KTUtil.onDOMContentLoaded(function() {
-        KTDatatablesServerSide.init();
-        KTForm.init();
-
-        $('select[name="unit_id"]').on('change', function() {
-            var unitId = $(this).val();
-            if (unitId) {
-                reRenderAreas(unitId);
-            }
         });
-
-        $('#kt_export_form').on('submit', function(e) {
-            e.preventDefault();
-            
-            var formData = new FormData(this);
-            formData.append('_token', '{{ csrf_token() }}');
-            
-            $.ajax({
-                url: "{{ route('employee.import') }}",
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status === 200) {
-                        toastr.success(response.message);
-                        $('#kt_modal_import').modal('hide');
-                        $('#kt_export_form')[0].reset();
-                        KTDatatablesServerSide.refresh();
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.responseJSON?.errors) {
-                        xhr.responseJSON.errors.forEach(error => {
-                            toastr.error(error);
-                        });
-                    }
-                }
-            });
-        });
-    });
-</script>
+    </script>
 @endsection

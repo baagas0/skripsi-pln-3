@@ -14,9 +14,32 @@ class ProccessVipController extends Controller
     {
         $roleId = Auth::user()->role_id;
         $data = ProccessVip::with(['diklat'])
+        ->when($roleId == 1, function ($q) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitId = Auth::user()->unit_id;
+            return $q->whereHas('diklat', function($qq) use ($unitId) {
+                $qq->where('unit_id', $unitId);
+            });
+        })
         ->when($roleId == 2, function ($q) {
             $q->whereHas('diklat', function($qq) {
                 $qq->where('vendor_id', Auth::user()->vendor_id);
+            });
+        })
+        ->when($roleId == 7, function ($q) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $q->whereHas('diklat', function($qq) use ($unitIds) {
+                $qq->whereIn('unit_id', $unitIds ?? []);
+            });
+        })
+        ->when($roleId == 8, function ($q) {
+            // Vice President melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $q->whereHas('diklat', function($qq) use ($unitIds) {
+                $qq->whereIn('unit_id', $unitIds ?? []);
             });
         })
         ->get();
@@ -28,7 +51,36 @@ class ProccessVipController extends Controller
 
     public function getData(Request $request) 
     {
-        $query = ProccessVip::with(['diklat']);
+        $roleId = Auth::user()->role_id;
+        $query = ProccessVip::with(['diklat'])
+        ->when($roleId == 1, function ($q) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitId = Auth::user()->unit_id;
+            return $q->whereHas('diklat', function($qq) use ($unitId) {
+                $qq->where('unit_id', $unitId);
+            });
+        })
+        ->when($roleId == 2, function ($q) {
+            $q->whereHas('diklat', function($qq) {
+                $qq->where('vendor_id', Auth::user()->vendor_id);
+            });
+        })
+        ->when($roleId == 7, function ($q) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $q->whereHas('diklat', function($qq) use ($unitIds) {
+                $qq->whereIn('unit_id', $unitIds ?? []);
+            });
+        })
+        ->when($roleId == 8, function ($q) {
+            // Vice President melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $q->whereHas('diklat', function($qq) use ($unitIds) {
+                $qq->whereIn('unit_id', $unitIds ?? []);
+            });
+        })->get();
 
         return datatables($query)
             ->filter(function ($query) use ($request) {

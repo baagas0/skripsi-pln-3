@@ -114,144 +114,19 @@
                     @foreach ($score4Tangibles as $item)
                     <tr>
                         <td style="width: 300px">{{ $item->category }}</td>
-                        <td style="width: 100%; display: flex; justify-content: space-between">
-                            <span>Rp.</span>
-                            <span>{{ number_format($item->cost, 2) }}</span>
+                        <td class="d-flex justify-content-between" style="width: 100%">
+                            <p>Rp.</p>
+                            <p>{{ number_format($item->cost, 2) }}</p>
                         </td>
                     </tr>
-                    @if(isset($item->detailsData) && $item->detailsData->count() > 0)
+                    @endforeach
                     <tr>
-                        <td colspan="2" style="padding-left: 20px;">
-                            <div style="font-size: 12px;">
-                                <strong>Calculation Breakdown:</strong>
-                                <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Component</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Sub-Component</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: left; background-color: #f2f2f2;">Operator</th>
-                                            <th style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f2f2f2;">Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if(isset($item->componentGroups))
-                                        @foreach($item->componentGroups as $componentName => $details)
-                                            @foreach($details as $index => $detail)
-                                                <tr>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">
-                                                        @if($index == 0){{ $componentName }}@endif
-                                                    </td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">{{ $detail->sub_component_name ?: '-' }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: center;">{{ $detail->operator }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: right;">Rp. {{ number_format($detail->price, 2) }}</td>
-                                                </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="3" style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">Subtotal:</td>
-                                                <td style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #f8f9fa; font-weight: bold;">
-                                                    <?php
-                                                        // Calculate subtotal for this component
-                                                        $subtotal = 0;
-                                                        $mainPrice = 0;
-                                                        $firstDetail = $details->first();
-                                                        $steps = [];
-                                                        
-                                                        if ($firstDetail) {
-                                                            $mainPrice = $firstDetail->price;
-                                                            $subtotal = $mainPrice;
-                                                            $steps[] = $mainPrice;
-                                                        }
-                                                        
-                                                        // Build formula for display
-                                                        $formula = $componentName;
-                                                        if (!empty($firstDetail->sub_component_name)) {
-                                                            $formula .= " [{$firstDetail->sub_component_name}]";
-                                                        }
-                                                        $formula .= ": Rp. " . number_format($mainPrice, 2);
-                                                        
-                                                        foreach ($details as $index => $detail) {
-                                                            if ($index > 0) { // Skip the first one as it's the base
-                                                                $formula .= " {$detail->operator} ";
-                                                                
-                                                                if (!empty($detail->sub_component_name)) {
-                                                                    $formula .= "{$detail->sub_component_name} (";
-                                                                }
-                                                                
-                                                                $formula .= "Rp. " . number_format($detail->price, 2);
-                                                                
-                                                                if (!empty($detail->sub_component_name)) {
-                                                                    $formula .= ")";
-                                                                }
-                                                                
-                                                                switch ($detail->operator) {
-                                                                    case '*':
-                                                                        $subtotal *= $detail->price;
-                                                                        break;
-                                                                    case '+':
-                                                                        $subtotal += $detail->price;
-                                                                        break;
-                                                                    case '-':
-                                                                        $subtotal -= $detail->price;
-                                                                        break;
-                                                                    case '/':
-                                                                        if ($detail->price != 0) {
-                                                                            $subtotal /= $detail->price;
-                                                                        } else {
-                                                                            $formula .= " (⚠️ division by zero)";
-                                                                        }
-                                                                        break;
-                                                                }
-                                                                
-                                                                $steps[] = $subtotal;
-                                                            }
-                                                        }
-                                                        
-                                                        $formula .= " = Rp. " . number_format($subtotal, 2);
-                                                        
-                                                        echo 'Rp. ' . number_format($subtotal, 2);
-                                                    ?>
-                                                    
-                                                    <?php if (count($steps) > 1): ?>
-                                                        <div style="font-size: 8pt; color: #666; margin-top: 3px;">
-                                                            <?php echo $formula; ?>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        @php
-                                            // Group details by component_name (fallback if componentGroups not set)
-                                            $componentGroups = $item->detailsData->groupBy('component_name');
-                                        @endphp
-                                        
-                                        @foreach($componentGroups as $componentName => $details)
-                                            @foreach($details as $index => $detail)
-                                                <tr>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">
-                                                        @if($index == 0){{ $componentName }}@endif
-                                                    </td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px;">{{ $detail->sub_component_name ?: '-' }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: center;">{{ $detail->operator }}</td>
-                                                    <td style="border: 1px solid #ddd; padding: 5px; text-align: right;">Rp. {{ number_format($detail->price, 2) }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @endforeach
-                                    @endif
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="3" style="border: 1px solid #ddd; padding: 5px; text-align: right; font-weight: bold;">Total for {{ $item->category }}:</td>
-                                            <td style="border: 1px solid #ddd; padding: 5px; text-align: right; background-color: #e9ecef; font-weight: bold;">
-                                                Rp. {{ number_format($item->cost, 2) }}
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                        <td style="width: 300px; background-color: #3699FF">Total Benefits</td>
+                        <td class="d-flex justify-content-between align-items-center" style="width: 100%; background-color: #3699FF">
+                            <p>Rp.</p>
+                            <p>{{ number_format($score4Tangibles->sum('cost'), 2) }}</p>
                         </td>
                     </tr>
-                    @endif
                 </table>
             </div>
             @endif            @if($showAllLevels || in_array('5', $selectedLevels))
@@ -328,7 +203,7 @@
                         colors: ['transparent']
                     },
                     xaxis: {
-                        categories: @json($scoreList1), // Static categories for x-axis
+                        categories: @json($scoreList1Category), // Static categories for x-axis
                         axisBorder: {
                             show: false,
                         },

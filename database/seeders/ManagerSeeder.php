@@ -25,7 +25,7 @@ class ManagerSeeder extends Seeder
         User::create([
             'name' => 'User Manager',
             'email' => 'manager@gmail.com',
-            'password' => Hash::make('pln#573*'),
+            'password' => Hash::make('password'),
             'role_id' => $r->id, // Assuming 1 is admin role
         ]);
     }

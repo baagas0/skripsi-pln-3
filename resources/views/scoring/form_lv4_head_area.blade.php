@@ -30,23 +30,6 @@
         animation: pulse 2s infinite;
         display: inline-block;
     }
-    
-    /* Formula display styles */
-    .component-summary {
-        transition: all 0.3s ease;
-    }
-    
-    .component-summary:hover {
-        box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.075);
-    }
-    
-    .formula-display {
-        line-height: 1.8;
-    }
-    
-    .formula-display .badge {
-        font-size: 0.85rem;
-    }
 </style>
 @endsection
 
@@ -54,9 +37,7 @@
 <div id="container-form" class="card card-flush w-md-650px overflow-auto py-5" style="height: 90vhss">
     <div class="card-body py-15 py-lg-20">
         <h1 class="anchor fw-bold my-5" id="theme-colors" data-kt-scroll-offset="50">{{ $diklat ? $diklat->name : '' }} - Result</h1>
-         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#guide">
-                                Guide
-                            </button>
+
         <div class="mb-3 form-group text-start">
             <label for="exampleFormControlInput1" class="required form-label">Bidang</label>
             <select name="area_id" required class="form-select"  data-placeholder="Pilih Bidang">
@@ -295,243 +276,111 @@
                 <div class="bg-primary p-3 rounded">
                     <h3 class="fw-bold mb-0 text-white">Tangible Benefit</h3>
                 </div>
-                <!--begin::Hierarchical 3-level input-->
+                <!--begin::Repeater-->
                 <div class="p-3">
-                    <div id="tangible-benefit-container" class="mb-6">
-                        <!-- Level 1: Category Selection -->
-                        <div id="level1-categories" class="form-group">
-                            @if(count($tangibles) > 0)
-                                @foreach ($tangibles as $key => $tangible)
-                                <div class="category-item mb-5 border rounded p-4">
-                                    <h5 class="mb-3">Category {{ $key + 1 }}</h5>
-                                    <div class="row mb-3">
-                                        <div class="col-md-9">
-                                            <label class="form-label">Category:</label>
-                                            <select name="kt_docs_repeater_basic[{{ $key }}][category]" class="form-control category-select level1-select" {{ $scoreLv4 ? 'disabled' : '' }}>
-                                                <option value=""></option>
-                                                <option {{ $tangible->category === 'Penghematan Biaya Bahan' ? 'selected' : '' }}>Penghematan Biaya Bahan</option>
-                                                <option {{ $tangible->category === 'Pengurangan Biaya Project' ? 'selected' : '' }}>Pengurangan Biaya Project</option>
-                                                <option {{ $tangible->category === 'Penghematan Waktu' ? 'selected' : '' }}>Penghematan Waktu</option>
-                                                <option {{ $tangible->category === 'Penurunan Biaya Pembelian' ? 'selected' : '' }}>Penurunan Biaya Pembelian</option>
-                                                <option {{ strpos($tangible->category, 'Lainnya:') === 0 ? 'selected' : '' }}>Lainnya</option>
-                                            </select>
-                                            <div class="mt-2 other-category-container" style="{{ strpos($tangible->category, 'Lainnya:') === 0 ? '' : 'display: none;' }}">
-                                                <input type="text" name="kt_docs_repeater_basic[{{ $key }}][other_category]" placeholder="Kategori lainnya..." 
-                                                    class="form-control other-category-input" 
-                                                    {{ $scoreLv4 ? 'disabled' : '' }}
-                                                    value="{{ strpos($tangible->category, 'Lainnya:') === 0 ? substr($tangible->category, 8) : '' }}">
+                    <div id="kt_docs_repeater_basic" class="mb-6">
+                        <!--begin::Form group-->
+                        <div class="form-group">
+                            <div data-repeater-list="kt_docs_repeater_basic">
+                                @if(count($tangibles) > 0)
+                                    @foreach ($tangibles as $tangible)
+                                    <div data-repeater-item>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <label class="form-label">Category:</label>
+                                                <select name="category" class="form-control category-select" id="category" {{ $scoreLv4 ? 'disabled' : '' }}>
+                                                    <option value=""></option>
+                                                    <option {{ $tangible->category === 'Peningkatan Penjualan' ? 'selected' : '' }}>Peningkatan Penjualan</option>
+                                                    <option {{ $tangible->category === 'Peningkatan kualitas secara keseluruhan' ? 'selected' : '' }}>Peningkatan kualitas secara keseluruhan</option>
+                                                    <option {{ $tangible->category === 'Peningkatan daya saing' ? 'selected' : '' }}>Peningkatan daya saing</option>
+                                                    <option {{ $tangible->category === 'Peningkatan produktifitas per staf' ? 'selected' : '' }}>Peningkatan produktifitas per staf</option>
+                                                    <option {{ $tangible->category === 'Peningkatan profitabilitas' ? 'selected' : '' }}>Peningkatan profitabilitas</option>
+                                                    <option {{ $tangible->category === 'Meningkatkan kepuasan pelanggan' ? 'selected' : '' }}>Meningkatkan kepuasan pelanggan</option>
+                                                    <option {{ $tangible->category === 'Peningkatan hubungan personel' ? 'selected' : '' }}>Peningkatan hubungan personel</option>
+                                                    <option {{ $tangible->category === 'Catatan keselamatan yang di tingkatkan' ? 'selected' : '' }}>Catatan keselamatan yang di tingkatkan</option>
+                                                    <option {{ $tangible->category === 'Kepatuhan terhadap peraturan' ? 'selected' : '' }}>Kepatuhan terhadap peraturan</option>
+                                                    <option {{ $tangible->category === 'Memperluas jangkauan tugas pekerja' ? 'selected' : '' }}>Memperluas jangkauan tugas pekerja</option>
+                                                    <option {{ $tangible->category === 'Memenuhi kekurangan tenaga kerja yang berkualifikasi' ? 'selected' : '' }}>Memenuhi kekurangan tenaga kerja yang berkualifikasi</option>
+                                                    <option {{ $tangible->category === 'Implementasi ide baru' ? 'selected' : '' }}>Implementasi ide baru</option>
+                                                    <option {{ strpos($tangible->category, 'Lainnya:') === 0 ? 'selected' : '' }}>Lainnya</option>
+                                                </select>
+                                                <div class="mt-2 other-category-container" style="{{ strpos($tangible->category, 'Lainnya:') === 0 ? '' : 'display: none;' }}">
+                                                    <input type="text" name="other_category" placeholder="Kategori lainnya..." 
+                                                        class="form-control other-category-input" 
+                                                        {{ $scoreLv4 ? 'disabled' : '' }}
+                                                        value="{{ strpos($tangible->category, 'Lainnya:') === 0 ? substr($tangible->category, 8) : '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Cost:</label>
+                                                <input type="text" name="cost" class="form-control mb-2 mb-md-0" placeholder="Total (Rp.)" data-control="currency" value="{{ $tangible->cost }}" {{ $scoreLv4 ? 'disabled' : '' }} />
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if(!$scoreLv4)
+                                                <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                                    <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
+                                                    Delete
+                                                </a>
+                                                @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            @if(!$scoreLv4)
-                                            <a href="javascript:;" class="btn btn-sm btn-light-danger mt-8 delete-category">
-                                                <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
-                                                Delete
-                                            </a>
-                                            @endif
-                                        </div>
                                     </div>
-
-                                    <!-- Display total cost - this is hidden input that will be submitted -->
-                                    <input type="hidden" name="kt_docs_repeater_basic[{{ $key }}][cost]" class="category-final-cost" value="{{ $tangible->cost }}" />
-                                    
-                                    <!-- Final calculated cost display -->
-                                    <div class="d-flex justify-content-end my-3">
-                                        <div class="bg-light-success px-4 py-2 rounded">
-                                            <strong>Total Cost: <span class="category-cost-display">Rp. {{ number_format($tangible->cost, 0, ',', '.') }}</span></strong>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Component display summary -->
-                                    <div class="component-summary bg-light rounded p-3 mb-3">
-                                        <strong class="d-block mb-2">
-                                            <i class="ki-duotone ki-calculator fs-4 me-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            Calculation Breakdown:
-                                        </strong>
-                                        <div class="formula-display text-muted">
-                                            <!-- Component formula will be displayed here -->
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Level 2: Component Section -->
-                                    <div class="level2-components">
-                                        @if(isset($tangible->componentGroups) && count($tangible->componentGroups) > 0)
-                                            @foreach($tangible->componentGroups as $componentName => $details)
-                                                <div class="component-item border rounded p-3 mb-3">
-                                                    <div class="component-header mb-2">
-                                                        <h6 class="mb-2">Component: {{ $componentName }}</h6>
-                                                        @if(!$scoreLv4)
-                                                        <button type="button" class="btn btn-sm btn-light-danger delete-component" style="float: right;">
-                                                            <i class="ki-duotone ki-trash fs-5"></i>
-                                                        </button>
-                                                        @endif
-                                                    </div>
-                                                    
-                                                    <div class="component-name-input mb-3">
-                                                        <input type="text" class="form-control component-name" 
-                                                               value="{{ $componentName }}" 
-                                                               placeholder="Component name"
-                                                               {{ $scoreLv4 ? 'disabled' : '' }} />
-                                                    </div>
-                                                    
-                                                    <!-- Level 3: Input Items -->
-                                                    <div class="level3-inputs">
-                                                        @foreach($details as $index => $detail)
-                                                        <div class="input-item mb-2">
-                                                            <div class="row">
-                                                                <div class="col-md-3">
-                                                                    <input type="text" class="form-control input-title" 
-                                                                           value="{{ $detail->sub_component_name ?? 'Input ' . ($index + 1) }}" 
-                                                                           placeholder="Input name"
-                                                                           {{ $scoreLv4 ? 'disabled' : '' }} />
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <input type="number" step="0.01" class="form-control input-price" 
-                                                                           value="{{ $detail->price }}" 
-                                                                           placeholder="0.00"
-                                                                           {{ $scoreLv4 ? 'disabled' : '' }} />
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <select class="form-select input-operator" {{ $scoreLv4 ? 'disabled' : '' }}>
-                                                                        <option value="add" {{ $detail->operator === '+' ? 'selected' : '' }}>+ Add</option>
-                                                                        <option value="subtract" {{ $detail->operator === '-' ? 'selected' : '' }}>- Subtract</option>
-                                                                        <option value="multiply" {{ $detail->operator === '*' ? 'selected' : '' }}>× Multiply</option>
-                                                                        <option value="divide" {{ $detail->operator === '/' ? 'selected' : '' }}>÷ Divide</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-3 text-end">
-                                                                    @if(!$scoreLv4)
-                                                                    <button type="button" class="btn btn-sm btn-light-danger delete-input">
-                                                                        <i class="ki-duotone ki-trash fs-5"></i> Delete
-                                                                    </button>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
-                                                    
-                                                    <!-- Component total display -->
-                                                    <div class="d-flex justify-content-end mt-3">
-                                                        <div class="bg-light-info px-3 py-2 rounded">
-                                                            <strong>Component Total: <span class="component-total">Rp. {{ isset($tangible->componentGroups[$componentName]->subtotal) ? number_format($tangible->componentGroups[$componentName]->subtotal, 0, ',', '.') : '0' }}</span></strong>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    @if(!$scoreLv4)
-                                                    <!-- Add Input Button -->
-                                                    <div class="text-center mt-3">
-                                                        <button type="button" class="btn btn-sm btn-light-success add-input">
-                                                            <i class="ki-duotone ki-plus fs-3"></i>
-                                                            Add Calculation Input
-                                                        </button>
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                        <!-- Empty state will be here when no components exist -->
-                                    </div>
-
-                                    <!-- Add Component Button -->
-                                    @if(!$scoreLv4)
-                                    <div class="text-center my-3">
-                                        <button type="button" class="btn btn-sm btn-light-info add-component">
-                                            <i class="ki-duotone ki-plus fs-3"></i>
-                                            Add Component
-                                        </button>
-                                    </div>
-                                    @endif
-                                </div>
-                                @endforeach
-                            @else
-                                <div class="category-item mb-5 border rounded p-4">
-                                    <h5 class="mb-3">Category 1</h5>
-                                    <div class="row mb-3">
-                                        <div class="col-md-9">
+                                    @endforeach
+                                @else
+                                <div data-repeater-item>
+                                    <div class="form-group row">
+                                        <div class="col-md-5">
                                             <label class="form-label">Category:</label>
-                                            <select name="kt_docs_repeater_basic[0][category]" class="form-control category-select level1-select" {{ $scoreLv4 ? 'disabled' : '' }}>
+                                            <select name="category" class="form-control category-select" id="category" {{ $scoreLv4 ? 'disabled' : '' }}>
                                                 <option value=""></option>
-                                                <option>Penghematan Biaya Bahan</option>
-                                                <option>Pengurangan Biaya Project</option>
-                                                <option>Penghematan Waktu</option>
-                                                <option>Penurunan Biaya Pembelian</option>
+                                                <option>Peningkatan Penjualan</option>
+                                                <option>Peningkatan kualitas secara keseluruhan</option>
+                                                <option>Peningkatan daya saing</option>
+                                                <option>Peningkatan produktifitas per staf</option>
+                                                <option>Peningkatan profitabilitas</option>
+                                                <option>Meningkatkan kepuasan pelanggan</option>
+                                                <option>Peningkatan hubungan personel</option>
+                                                <option>Catatan keselamatan yang di tingkatkan</option>
+                                                <option>Kepatuhan terhadap peraturan</option>
+                                                <option>Memperluas jangkauan tugas pekerja</option>
+                                                <option>Memenuhi kekurangan tenaga kerja yang berkualifikasi</option>
+                                                <option>Implementasi ide baru</option>
                                                 <option>Lainnya</option>
                                             </select>
                                             <div class="mt-2 other-category-container" style="display: none;">
-                                                <input type="text" name="kt_docs_repeater_basic[0][other_category]" placeholder="Kategori lainnya..." 
-                                                    class="form-control other-category-input" 
-                                                    {{ $scoreLv4 ? 'disabled' : '' }}
-                                                    value="">
+                                                <input type="text" name="other_category" placeholder="Kategori lainnya..." 
+                                                       class="form-control other-category-input" 
+                                                       {{ $scoreLv4 ? 'disabled' : '' }}
+                                                       value="">
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Cost:</label>
+                                            <input type="text" name="cost" class="form-control mb-2 mb-md-0" placeholder="Total (Rp.)" {{ $scoreLv4 ? 'disabled' : '' }} />
+                                        </div>
                                         <div class="col-md-3">
-                                            @if(!$scoreLv4)
-                                            <a href="javascript:;" class="btn btn-sm btn-light-danger mt-8 delete-category">
+                                            <a href="javascript:;" data-repeater-delete class="btn btn-sm btn-light-danger mt-3 mt-md-8 {{ $scoreLv4 ? 'd-none' : '' }}">
                                                 <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
                                                 Delete
                                             </a>
-                                            @endif
                                         </div>
                                     </div>
-
-                                    <!-- Display total cost - this is hidden input that will be submitted -->
-                                    <input type="hidden" name="kt_docs_repeater_basic[0][cost]" class="category-final-cost" value="0" />
-                                    
-                                    <!-- Final calculated cost display -->
-                                    <div class="d-flex justify-content-end my-3">
-                                        <div class="bg-light-success px-4 py-2 rounded">
-                                            <strong>Total Cost: <span class="category-cost-display">Rp. 0</span></strong>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Component display summary -->
-                                    <div class="component-summary bg-light rounded p-3 mb-3">
-                                        <strong class="d-block mb-2">
-                                            <i class="ki-duotone ki-calculator fs-4 me-2">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                            </i>
-                                            Calculation Breakdown:
-                                        </strong>
-                                        <div class="formula-display text-muted">
-                                            No components added yet
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Level 2: Component Section -->
-                                    <div class="level2-components">
-                                        <!-- Empty state - Component content will be added by JavaScript -->
-                                    </div>
-
-                                    <!-- Add Component Button -->
-                                    @if(!$scoreLv4)
-                                    <div class="text-center my-3">
-                                        <button type="button" class="btn btn-sm btn-light-info add-component">
-                                            <i class="ki-duotone ki-plus fs-3"></i>
-                                            Add Component
-                                        </button>
-                                    </div>
-                                    @endif
                                 </div>
+                                {{-- @endif --}}
+                                @endif
+                            </div>
+                        </div>
+
+                        <!--begin::Form group-->
+                        <div class="form-group mt-5">
+                            @if(!$scoreLv4)
+                            <a href="javascript:;" data-repeater-create class="btn btn-sm btn-light-primary">
+                                <i class="ki-duotone ki-plus fs-3"></i>
+                                Add
+                            </a>
                             @endif
                         </div>
-
-                        <!-- Add Category Button -->
-                        @if(!$scoreLv4)
-                        <div class="text-center mt-5">
-                            <button type="button" class="btn btn-sm btn-light-primary" id="add-category">
-                                <i class="ki-duotone ki-plus fs-3"></i>
-                                Add Category
-                            </button>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                <!--end::Hierarchical 3-level input-->
+                        <!--end::Form group-->
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -579,621 +428,33 @@
         <!--end::Text-->
     </div>
 </div>
-
-<div class="modal fade" tabindex="-1" id="guide">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="">Referensi Input Tangible Benefits</h5>
-
-                    <!--begin::Close-->
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <span class="svg-icon svg-icon-2x"></span>
-                    </div>
-                    <!--end::Close-->
-                </div>
-
-                <div class="modal-body">
-                    <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="card-title align-items-start flex-column">
-                    Penghematan Biaya Bahan
-                </h6>
-            </div>
-            <div class="card-body">
-                <p><strong>Referensi:</strong></p>
-                <ul>
-                    <li>Komponen 1 = Penurunan Bahan x harga bahan x +add (input lain) = ________</li>
-                    <li>Komponen 2 = Penurunan Bahan x harga bahan x +add (input lain) = ________</li>
-                </ul>
-                <p>+Add (Komponen lain jika ada)</p>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="card-title align-items-start flex-column">
-                    Pengurangan Biaya Project
-                    <h6>
-            </div>
-            <div class="card-body">
-                <p><strong>Referensi:</strong></p>
-                <ul>
-                    <li>Pemanfaatan sumber daya yang lebih efisien = Jumlah orang yang terlibat project x upah x +add (input lain) = ________</li>
-                    <li>Proyek yang tepat waktu, sesuai anggaran dan cakupan = Jumlah tambahan anggaran/denda yang terabaikan x +add (input lain) = ________</li>
-                    <li>Peningkatan dalam pelacakan proyek klien yang lebih baik = Biaya tambahan yang terabaikan x +add (input lain) = ________</li>
-                </ul>
-                <p>+Add (Komponen lain jika ada)</p>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="card-title align-items-start flex-column">
-
-                    Penghematan Waktu
-                </h6>
-            </div>
-            <div class="card-body">
-                <p><strong>Referensi:</strong></p>
-                <ul>
-                    <li>Penghematan waktu operasi = Jam yang dihemat x gaji x +add (input lain) = ________</li>
-                    <li>Penghematan waktu pengawasan = Jam yang dihemat x gaji x +add (input lain) = ________</li>
-                </ul>
-                <p>+Add (Komponen lain jika ada)</p>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="card-title align-items-start flex-column">
-                    Lainnya
-                </h6>
-            </div>
-            <div class="card-body">
-                <p><strong>Referensi:</strong></p>
-                <ul>
-                    <li>Komponen 1 = (Faktor Pengali) x (Faktor Pengali) x +add (input lain) = ________</li>
-                    <li>Komponen 2 = (Faktor Pengali) x (Faktor Pengali) x +add (input lain) = ________</li>
-                </ul>
-                <p>+Add (Komponen lain jika ada)</p>
-            </div>
-        </div>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('script')
     <script src="{{ asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
     <script src="{{ asset('resources/js/scoring-lv4.js') }}"></script>
-    <script src="{{ asset('resources/js/tangible-calculation.js') }}"></script>
     <script>
-        // Setup the category select handling for "Lainnya" option
         function setupCategorySelects() {
-            $('.category-select').off('change').on('change', function() {
-                const categoryItem = $(this).closest('.category-item');
-                const componentsContainer = categoryItem.find('.level2-components');
-                const selected = $(this).val();
-                componentsContainer.empty();
-
-                // Show/hide other-category input
-                if (selected === 'Lainnya') {
-                    categoryItem.find('.other-category-container').show();
+            $('.category-select').on('change', function() {
+                const otherInput = $(this).closest('.form-group').find('.other-category-container');
+                
+                if ($(this).val() === 'Lainnya') {
+                    otherInput.slideDown();
+                    // Focus on the other input for better UX
+                    setTimeout(function() {
+                        otherInput.find('input').focus();
+                    }, 300);
                 } else {
-                    categoryItem.find('.other-category-container').hide();
+                    otherInput.slideUp();
                 }
-
-                // Mapping kategori ke komponen dan sub-komponen
-                const mapping = {
-                    'Penghematan Biaya Bahan': [
-                        {
-                            name: 'Komponen 1',
-                            subs: ['Penurunan bahan', 'Harga Bahan']
-                        }
-                    ],
-                    'Pengurangan Biaya Project': [
-                        {
-                            name: 'Pemanfaatan sumber daya yang lebih efisien',
-                            subs: ['Jumlah orang yang terlibat project', 'Upah']
-                        },
-                        {
-                            name: 'Proyek yang tepat waktu sesuai anggaran dan cakupan',
-                            subs: ['Jumlah tambahan anggaran', 'Denda yang terabaikan']
-                        },
-                        {
-                            name: 'Peningkatan dalam pelacakan proyek klien yang lebih baik',
-                            subs: ['Biaya tambahan yang terabaikan']
-                        }
-                    ],
-                    'Penghematan Waktu': [
-                        {
-                            name: 'Penghematan waktu operasi',
-                            subs: ['Jam yang dihemat', 'Gaji']
-                        },
-                        {
-                            name: 'Penghematan waktu pengawasan',
-                            subs: ['Jam yang dihemat', 'Gaji']
-                        }
-                    ],
-                    'Penurunan Biaya Pembelian': [
-                        {
-                            name: 'Komponen 1',
-                            subs: ['Jumlah Pembelian', 'Nominal penghematan']
-                        }
-                    ]
-                };
-
-                // if (mapping[selected]) {
-                //     mapping[selected].forEach(function(comp, compIdx) {
-                //         // Tambahkan komponen
-                //         const categoryIndex = $('.category-item').index(categoryItem);
-                //         const componentIndex = compIdx;
-                //         const componentHtml = `
-                //         <div class="component-item mt-4 mb-3 border border-dashed p-3 bg-light-primary">
-                //             <div class="row mb-3">
-                //                 <div class="col-md-9">
-                //                     <label class="form-label">Component Name:</label>
-                //                     <input type="text" class="form-control component-name" value="${comp.name}" name="component_name[${categoryIndex}][${componentIndex}]" />
-                //                 </div>
-                //                 <div class="col-md-3 text-end">
-                //                     <button type="button" class="btn btn-sm btn-light-danger mt-8 delete-component" onclick="deleteComponentNew(this)">
-                //                         <i class="ki-duotone ki-trash fs-5"></i> Delete
-                //                     </button>
-                //                 </div>
-                //             </div>
-                //             <div class="level3-inputs">
-                //             </div>
-                //             <div class="text-center my-3">
-                //                 <button type="button" class="btn btn-sm btn-light-warning add-input">
-                //                     <i class="ki-duotone ki-plus fs-3"></i> Add Input
-                //                 </button>
-                //             </div>
-                //             <div class="d-flex justify-content-end">
-                //                 <div class="bg-light-info px-3 py-2 rounded">
-                //                     Component Total: <strong class="component-total">Rp. 0</strong>
-                //                 </div>
-                //             </div>
-                //         </div>`;
-                //         componentsContainer.append(componentHtml);
-                //         // Tambahkan sub-komponen
-                //         const newComponent = componentsContainer.children('.component-item:last');
-                //         const inputsContainer = newComponent.find('.level3-inputs');
-                //         comp.subs.forEach(function(sub, subIdx) {
-                //             const inputHtml = `
-                //             <div class="input-item mb-3 pt-3 border-top">
-                //                 <div class="row align-items-center">
-                //                     <div class="col-md-3">
-                //                         <label class="form-label">Title:</label>
-                //                         <input type="text" class="form-control input-title" value="${sub}" name="input_title[${categoryIndex}][${componentIndex}][${subIdx}]" />
-                //                     </div>
-                //                     <div class="col-md-3">
-                //                         <label class="form-label">Price:</label>
-                //                         <input type="number" step="0.01" class="form-control input-price" placeholder="0.00" 
-                //                                name="input_price[${categoryIndex}][${componentIndex}][${subIdx}]" />
-                //                     </div>
-                //                     <div class="col-md-3">
-                //                         <label class="form-label">Operator:</label>
-                //                         <select class="form-select input-operator" name="input_operator[${categoryIndex}][${componentIndex}][${subIdx}]">
-                //                             <option value="add">+ Add</option>
-                //                             <option value="subtract">- Subtract</option>
-                //                             <option value="multiply">× Multiply</option>
-                //                             <option value="divide">÷ Divide</option>
-                //                         </select>
-                //                     </div>
-                //                     <div class="col-md-3 text-end">
-                //                         <button type="button" class="btn btn-sm btn-light-danger delete-input">
-                //                             <i class="ki-duotone ki-trash fs-5"></i> Delete
-                //                         </button>
-                //                     </div>
-                //                 </div>
-                //             </div>`;
-                //             inputsContainer.append(inputHtml);
-                //         });
-                //         // Initialize decimal inputs with Inputmask
-                //         if (typeof Inputmask !== 'undefined') {
-                //             Inputmask("999.999.999,99", {
-                //                 "numericInput": true
-                //             }).mask(newComponent.find('.decimal-input'));
-
-                //             // Add event handler for price changes and operator changes
-                //             newComponent.find('.decimal-input, .input-operator').on('input change', function() {
-                //                 recalculateComponentTotal($(this).closest('.component-item'));
-                //                 recalculateCategoryTotal(categoryItem);
-                //                 updateFormulaDisplay(categoryItem);
-                //             });
-                //         }
-                //     });
-                // } else if(selected === 'Lainnya') {
-                //     // Biarkan user menambah manual
-                // }
-                recalculateCategoryTotal(categoryItem);
-                updateFormulaDisplay(categoryItem);
             });
+            
             // Initialize on page load
             $('.category-select').each(function() {
-                const categoryItem = $(this).closest('.category-item');
                 if ($(this).val() === 'Lainnya') {
-                    categoryItem.find('.other-category-container').show();
-                } else {
-                    categoryItem.find('.other-category-container').hide();
+                    $(this).closest('.form-group').find('.other-category-container').show();
                 }
             });
-        }
-        
-        // Function to add a new component (Level 2)
-        function addComponent(button) {
-            const categoryItem = $(button).closest('.category-item');
-            const componentsContainer = categoryItem.find('.level2-components');
-            const categoryIndex = $('.category-item').index(categoryItem);
-            const componentIndex = componentsContainer.children('.component-item').length;
-            
-            const componentHtml = `
-                <div class="component-item mt-4 mb-3 border border-dashed p-3 bg-light-primary">
-                    <div class="row mb-3">
-                        <div class="col-md-9">
-                            <label class="form-label">Component Name:</label>
-                            <input type="text" class="form-control component-name" placeholder="Enter component name" 
-                                  name="component_name[${categoryIndex}][${componentIndex}]" />
-                        </div>
-                        <div class="col-md-3 text-end">
-                            <button type="button" class="btn btn-sm btn-light-danger mt-8 delete-component">
-                                <i class="ki-duotone ki-trash fs-5"></i> Delete
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="level3-inputs">
-                        <!-- Calculation inputs will be added here -->
-                    </div>
-                    
-                    <div class="text-center my-3">
-                        <button type="button" class="btn btn-sm btn-light-warning add-input">
-                            <i class="ki-duotone ki-plus fs-3"></i> Add Input
-                        </button>
-                    </div>
-                    
-                    <!-- Component total (calculated from all inputs) -->
-                    <div class="d-flex justify-content-end">
-                        <div class="bg-light-info px-3 py-2 rounded">
-                            Component Total: <strong class="component-total">Rp. 0</strong>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            componentsContainer.append(componentHtml);
-            
-            // Attach event handlers for the new component
-            const newComponent = componentsContainer.children('.component-item:last');
-            
-            // Add component name change handler to update formula display
-            newComponent.find('.component-name').on('change', function() {
-                recalculateCategoryTotal(categoryItem);
-            });
-            
-            // Add input button handler
-            newComponent.find('.add-input').on('click', function() {
-                addInput($(this));
-            });
-            
-            // Delete component button handler
-            newComponent.find('.delete-component').on('click', function() {
-                deleteComponent($(this));
-            });
-            
-            // Add the first input automatically
-            addInput(newComponent.find('.add-input'));
-            
-            // Update total calculation and formula display
-            recalculateAllTotals();
-        }
-        
-        // Function to add a new calculation input (Level 3)
-        function addInput(button) {
-            const componentItem = $(button).closest('.component-item');
-            const inputsContainer = componentItem.find('.level3-inputs');
-            const categoryItem = componentItem.closest('.category-item');
-            const categoryIndex = $('.category-item').index(categoryItem);
-            const componentIndex = categoryItem.find('.level2-components').children('.component-item').index(componentItem);
-            const inputIndex = inputsContainer.children('.input-item').length;
-            
-            const inputHtml = `
-                <div class="input-item mb-3 pt-3 border-top">
-                    <div class="row align-items-center">
-                        <div class="col-md-3">
-                            <label class="form-label">Title:</label>
-                            <input type="text" class="form-control input-title" placeholder="Title" 
-                                  name="input_title[${categoryIndex}][${componentIndex}][${inputIndex}]" />
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Price:</label>
-                            <input type="number" step="0.01" class="form-control input-price" placeholder="0.00" 
-                                   name="input_price[${categoryIndex}][${componentIndex}][${inputIndex}]" />
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Operator:</label>
-                            <select class="form-select input-operator" name="input_operator[${categoryIndex}][${componentIndex}][${inputIndex}]">
-                                <option value="add">+ Add</option>
-                                <option value="subtract">- Subtract</option>
-                                <option value="multiply">× Multiply</option>
-                                <option value="divide">÷ Divide</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 text-end">
-                            <button type="button" class="btn btn-sm btn-light-danger mt-8 delete-input">
-                                <i class="ki-duotone ki-trash fs-5"></i> Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            inputsContainer.append(inputHtml);
-            
-            // Initialize decimal number input
-            const priceInput = inputsContainer.find('.input-item:last .input-price');
-            priceInput.on('input', function() {
-                // Ensure the value is a valid decimal
-                if (this.value && !isNaN(this.value)) {
-                    this.value = parseFloat(this.value).toFixed(3);
-                }
-            });
-            
-            // Attach event handlers
-            const newInput = inputsContainer.find('.input-item:last');
-            
-            // Delete input button handler
-            newInput.find('.delete-input').on('click', function() {
-                deleteInput($(this));
-            });
-            
-            // Add input title change handler to update formula display
-            newInput.find('.input-title').on('keyup change blur', function() {
-                recalculateComponentTotal(componentItem);
-                recalculateCategoryTotal(categoryItem);
-            });
-            
-            // Input price change handler for recalculation
-            newInput.find('.input-price').on('keyup change blur', function() {
-                recalculateComponentTotal(componentItem);
-                recalculateCategoryTotal(categoryItem);
-            });
-            
-            // Input operator change handler for recalculation
-            newInput.find('.input-operator').on('change', function() {
-                recalculateComponentTotal(componentItem);
-                recalculateCategoryTotal(categoryItem);
-            });
-            
-            // If this is not the first input, focus on the input title for better UX
-            if (inputIndex > 0) {
-                setTimeout(() => {
-                    newInput.find('.input-title').focus();
-                }, 100);
-            }
-            
-            // Trigger recalculation
-            recalculateComponentTotal(componentItem);
-            recalculateCategoryTotal(categoryItem);
-        }
-        
-        // Function to delete a component
-        function deleteComponent(button) {
-            const componentItem = $(button).closest('.component-item');
-            const categoryItem = componentItem.closest('.category-item');
-            
-            componentItem.remove();
-            recalculateCategoryTotal(categoryItem);
-            
-            // If no components left, update formula display with default message
-            if (categoryItem.find('.component-item').length === 0) {
-                categoryItem.find('.formula-display').html('No components added yet');
-            }
-        }
-
-        function deleteComponentNew(button) {
-            if (confirm('Are you sure you want to delete this component?')) {
-                const categoryItem = $(button).closest('.category-item');
-                $(button).closest('.component-item').remove();
-                recalculateCategoryTotal(categoryItem);
-                updateFormulaDisplay(categoryItem);
-            }
-        }
-        
-        // Function to delete an input
-        function deleteInput(button) {
-            const inputItem = $(button).closest('.input-item');
-            const componentItem = inputItem.closest('.component-item');
-            const categoryItem = componentItem.closest('.category-item');
-            
-            inputItem.remove();
-            recalculateComponentTotal(componentItem);
-            recalculateCategoryTotal(categoryItem);
-        }
-        
-        // Function to delete a category
-        function deleteCategory(button) {
-            const categoryItem = $(button).closest('.category-item');
-            
-            // Only delete if there's more than one category
-            if ($('.category-item').length > 1) {
-                categoryItem.remove();
-                
-                // Renumber the remaining categories
-                $('#level1-categories .category-item').each(function(index) {
-                    $(this).find('h5').text('Category ' + (index + 1));
-                    
-                    // Update all input names with new index
-                    $(this).find('select.level1-select').attr('name', `kt_docs_repeater_basic[${index}][category]`);
-                    $(this).find('.other-category-input').attr('name', `kt_docs_repeater_basic[${index}][other_category]`);
-                    $(this).find('.category-final-cost').attr('name', `kt_docs_repeater_basic[${index}][cost]`);
-                    $(this).find('.formula-display-input').attr('name', `kt_docs_repeater_basic[${index}][formula_display_html]`);
-                });
-            } else {
-                // If it's the last category, just clear inputs
-                categoryItem.find('.level2-components').empty();
-                categoryItem.find('.category-final-cost').val(0);
-                categoryItem.find('.category-cost-display').text('Rp. 0');
-            }
-        }
-        
-        // Calculate component total based on all inputs
-        function recalculateComponentTotal(componentItem) {
-            let total = 0;
-            let isFirstInput = true;
-            let inputCount = componentItem.find('.input-item').length;
-            if (inputCount === 0) {
-                componentItem.find('.component-total').text('Rp. 0.00');
-                recalculateCategoryTotal(componentItem.closest('.category-item'));
-                return 0;
-            }
-            componentItem.find('.input-item').each(function() {
-                let price = parseFloat($(this).find('.input-price').val().replace(/,/g, '')) || 0;
-                const operator = $(this).find('.input-operator').val();
-                if (isFirstInput) {
-                    total = price;
-                    isFirstInput = false;
-                } else {
-                    if (operator === 'add') total += price;
-                    else if (operator === 'subtract') total -= price;
-                    else if (operator === 'multiply') total *= price;
-                    else if (operator === 'divide') total = price !== 0 ? total / price : total;
-                }
-            });
-            componentItem.find('.component-total').text('Rp. ' + formatNumber(total));
-            recalculateCategoryTotal(componentItem.closest('.category-item'));
-            return total;
-        }
-        
-        // Calculate category total based on all components and update formula display
-        function recalculateCategoryTotal(categoryItem) {
-            let total = 0;
-            let formulaHtml = '';
-            
-            // If there are no components, show default message
-            if (categoryItem.find('.component-item').length === 0) {
-                formulaHtml = 'No components added yet';
-            } else {
-                // Build the formula display for all components
-                categoryItem.find('.component-item').each(function(index) {
-                    const componentName = $(this).find('.component-name').val() || 'Component ' + (index + 1);
-                    const componentTotal = parseFloat($(this).find('.component-total').text().replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
-                    
-                    // Add component name and amount to formula
-                    let componentFormula = '<div class="mb-1"><span class="text-primary fw-bold">' + componentName + '</span></div>';
-                    
-                    // Add the formula breakdown for this component
-                    let inputFormula = '<div class="ps-3 mb-2">';
-                    let calculationFormula = '';
-                    let isFirstInput = true;
-                    
-                    $(this).find('.input-item').each(function(inputIndex) {
-                        const inputTitle = $(this).find('.input-title').val() || 'Input ' + (inputIndex + 1);
-                        const inputPrice = parseFloat($(this).find('.input-price').val().replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
-                        const operator = $(this).find('.input-operator').val();
-                        
-                        if (isFirstInput) {
-                            calculationFormula += '<span class="badge badge-light-primary">' + inputTitle + '</span> <span class="badge badge-light">Rp.' + formatNumber(inputPrice) + '</span>';
-                            isFirstInput = false;
-                        } else {
-                            let operatorSymbol = '';
-                            let operatorClass = '';
-                            
-                            switch(operator) {
-                                case 'add': 
-                                    operatorSymbol = ' + '; 
-                                    operatorClass = 'text-success';
-                                    break;
-                                case 'subtract': 
-                                    operatorSymbol = ' - '; 
-                                    operatorClass = 'text-danger';
-                                    break;
-                                case 'multiply': 
-                                    operatorSymbol = ' × '; 
-                                    operatorClass = 'text-warning';
-                                    break;
-                                case 'divide': 
-                                    operatorSymbol = ' ÷ '; 
-                                    operatorClass = 'text-info';
-                                    break;
-                            }
-                            
-                            calculationFormula += ' <span class="' + operatorClass + ' fw-bold">' + operatorSymbol + '</span> <span class="badge badge-light-primary">' + inputTitle + '</span> <span class="badge badge-light">Rp.' + formatNumber(inputPrice) + '</span>';
-                        }
-                    });
-                    
-                    inputFormula += calculationFormula + ' = <span class="badge badge-light-success fw-bold">Rp.' + formatNumber(componentTotal) + '</span></div>';
-                    
-                    // Add to the overall formula
-                    if (index > 0) {
-                        formulaHtml += '<hr class="my-2">';
-                    }
-                    
-                    formulaHtml += componentFormula + inputFormula;
-                    
-                    // Add to the total
-                    total += componentTotal;
-                });
-                
-                // Add final total as a summary if there are multiple components
-                if (categoryItem.find('.component-item').length > 1) {
-                    formulaHtml += '<hr class="my-2">';
-                    formulaHtml += '<div class="d-flex justify-content-end"><span class="badge badge-primary fw-bold">Total: Rp.' + formatNumber(total) + '</span></div>';
-                }
-            }
-            
-            // Update the formula display
-            categoryItem.find('.formula-display').html(formulaHtml);
-            
-            // Update the hidden input with the raw number
-            categoryItem.find('.category-final-cost').val(total);
-            
-            // Store the formula display HTML in a hidden input for submission
-            const categoryIndex = $('#level1-categories .category-item').index(categoryItem);
-            if (!categoryItem.find('.formula-display-input').length) {
-                categoryItem.append(`<input type="hidden" class="formula-display-input" name="kt_docs_repeater_basic[${categoryIndex}][formula_display_html]" value="">`);
-            }
-            categoryItem.find('.formula-display-input').val(formulaHtml);
-            
-            // Update the display with the formatted number
-            categoryItem.find('.category-cost-display').text('Rp. ' + formatNumber(total));
-            
-            return total;
-        }
-        
-        // Recalculate all totals in the form
-        function recalculateAllTotals() {
-            $('.category-item').each(function() {
-                recalculateCategoryTotal($(this));
-                // updateFormulaDisplay($(this));
-            });
-        }
-        
-        // Helper function to format numbers
-        function formatNumber(num) {
-            return num.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-        
-        // Function to load existing calculation data from saved calculation breakdown
-        function loadCalculationData() {
-            @if($tangibles && $tangibles->count() > 0)
-                @foreach($tangibles as $index => $tangible)
-                    @if($tangible->calculation_breakdown)
-                        // If there's a saved calculation breakdown, display it
-                        const categoryItem = $('.category-item').eq({{ $index }});
-                        categoryItem.find('.formula-display').html(`{!! $tangible->calculation_breakdown !!}`);
-                        
-                        // Also add a hidden input for the display HTML
-                        if (!categoryItem.find('.formula-display-input').length) {
-                            categoryItem.append(`<input type="hidden" class="formula-display-input" name="kt_docs_repeater_basic[{{ $index }}][formula_display_html]" value="">`);
-                        }
-                        categoryItem.find('.formula-display-input').val(`{!! $tangible->calculation_breakdown !!}`);
-                    @endif
-                @endforeach
-            @endif
         }
 
         // Function to handle lainnya (other) option
@@ -1238,12 +499,6 @@
             setupCategorySelects();
             setupLainnyaCheckbox();
             
-            // Initialize formula display for existing data
-            recalculateAllTotals();
-            
-            // For existing data, load calculation display from saved data
-            loadCalculationData();
-            
             // Define base URL for AJAX requests
             const base_url = '{{ url("") }}';
 
@@ -1252,6 +507,11 @@
                 $('#container-form').css('height', 'auto');
             }
             
+            // Initialize currency masks for existing fields
+            Inputmask("Rp. 999.999.999,99", {
+                "numericInput": true
+            }).mask($('[data-control="currency"]'));
+
             // Handle select/deselect all employees
             $('.select-all-employees').on('click', function(e) {
                 e.preventDefault();
@@ -1283,138 +543,33 @@
                     window.location.href = baseUrl + '?area_id=' + areaId;
                 }
             });
-            
-            // Initialize the 3-level hierarchical form
-            
-            // Add Category Button
-            $('#add-category').on('click', function() {
-                // Get the current number of categories
-                const categoryCount = $('.category-item').length;
-                
-                // Create a new category with a new index
-                const newCategoryHtml = `
-                    <div class="category-item mb-5 border rounded p-4">
-                        <h5 class="mb-3">Category ${categoryCount + 1 }</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-9">
-                                <label class="form-label">Category:</label>
-                                <select name="kt_docs_repeater_basic[${categoryCount}][category]" class="form-control category-select level1-select">
-                                    <option value=""></option>
-                                    <option>Penghematan Biaya Bahan</option>
-                                    <option>Pengurangan Biaya Project</option>
-                                    <option>Penghematan Waktu</option>
-                                    <option>Penurunan Biaya Pembelian</option>
-                                    <option>Lainnya</option>
-                                </select>
-                                <div class="mt-2 other-category-container" style="display: none;">
-                                    <input type="text" name="kt_docs_repeater_basic[${categoryCount}][other_category]" placeholder="Kategori lainnya..." 
-                                        class="form-control other-category-input">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="javascript:;" class="btn btn-sm btn-light-danger mt-8 delete-category">
-                                    <i class="ki-duotone ki-trash fs-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
-                                    Delete
-                                </a>
-                            </div>
-                        </div>
 
-                        <!-- Display total cost - this is hidden input that will be submitted -->
-                        <input type="hidden" name="kt_docs_repeater_basic[${categoryCount}][cost]" class="category-final-cost" value="0" />
-                        
-                        <!-- Final calculated cost display -->
-                        <div class="d-flex justify-content-end my-3">
-                            <div class="bg-light-success px-4 py-2 rounded">
-                                <strong>Total Cost: <span class="category-cost-display">Rp. 0</span></strong>
-                            </div>
-                        </div>
-                        
-                        <!-- Component display summary -->
-                        <div class="component-summary bg-light rounded p-3 mb-3">
-                            <strong class="d-block mb-2">
-                                <i class="ki-duotone ki-calculator fs-4 me-2">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                Calculation Breakdown:
-                            </strong>
-                            <div class="formula-display text-muted">
-                                No components added yet
-                            </div>
-                        </div>
-                        
-                        <!-- Level 2: Component Section -->
-                        <div class="level2-components">
-                            <!-- Component content will be added by JavaScript -->
-                        </div>
+            $('#kt_docs_repeater_basic').repeater({
+                initEmpty: {{ count($tangibles) == 0 ? 'true' : 'false' }},
 
-                        <!-- Add Component Button -->
-                        <div class="text-center my-3">
-                            <button type="button" class="btn btn-sm btn-light-info add-component">
-                                <i class="ki-duotone ki-plus fs-3"></i>
-                                Add Component
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                // Append the new category to the container
-                $('#level1-categories').append(newCategoryHtml);
-                
-                // Initialize the new category
-                const newCategory = $('.category-item:last');
-                
-                // Setup category select
-                setupCategorySelects();
-                
-                // Add component button handler
-                newCategory.find('.add-component').on('click', function() {
-                    addComponent($(this));
-                });
-                
-                // Delete category button handler
-                newCategory.find('.delete-category').on('click', function() {
-                    deleteCategory($(this));
-                });
-            });
-            
-            // Set up existing categories
-            $('.category-item').each(function() {
-                // For each category, set up the delete button 
-                $(this).find('.delete-category').on('click', function() {
-                    deleteCategory($(this));
-                });
-                
-                // Set up add component button
-                $(this).find('.add-component').on('click', function() {
-                    addComponent($(this));
-                });
-                
-                // Check if this category has saved calculation breakdown data
-                const formulaDisplay = $(this).find('.formula-display');
-                const categoryIndex = $('.category-item').index($(this));
-                
-                // Add hidden input for formula display if not exists
-                if (!$(this).find('.formula-display-input').length) {
-                    $(this).append(`<input type="hidden" class="formula-display-input" name="kt_docs_repeater_basic[${categoryIndex}][formula_display_html]" value="">`);
+                defaultValues: {
+                    'text-input': 'foo'
+                },
+
+                show: function () {
+                    // Initialize currency mask on new items
+                    Inputmask("Rp. 999.999.999,99", {
+                        "numericInput": true
+                    }).mask($(this).find('[data-control="currency"]'));
+
+                    // Setup category selects for new items
+                    setupCategorySelects();
+
+                    $(this).slideDown();
+                },
+
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
                 }
             });
 
             $('#form_scoring_lv4').on('submit', function(e) {
                 e.preventDefault();
-                
-                // Prepare component data for submission
-                try {
-                    if (typeof prepareFormComponentData === 'function') {
-                        console.log('Preparing form component data...');
-                        prepareFormComponentData();
-                        console.log('Form component data prepared successfully');
-                    } else {
-                        console.warn('prepareFormComponentData function is not available');
-                    }
-                } catch (error) {
-                    console.error('Error preparing form component data:', error);
-                }
 
                 // Immediately check for employee selection before anything else
                 var employeeChecked = $('.employee-checkbox:checked').length > 0;
@@ -1449,21 +604,105 @@
                     return false;
                 }
                 
+                // Check if at least one employee is selected (required)
+                var employeeChecked = $('.employee-checkbox:checked').length > 0;
+                if (!employeeChecked) {
+                    Swal.fire({
+                        text: "Silakan pilih minimal satu peserta pelatihan",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                    $('html, body').animate({
+                        scrollTop: $('.employee-checkbox').first().offset().top - 100
+                    }, 500);
+                    return false;
+                }
+
                 // Process category selects for "Other" option
-                $('.category-item').each(function(index) {
-                    const categorySelect = $(this).find('select.level1-select');
+                console.log('Starting to process category selects');
+                $(this).find('[data-repeater-item]').each(function(index) {
+                    const categorySelect = $(this).find('.category-select');
+                    const otherCategoryInput = $(this).find('.other-category-input');
+                    
+                    console.log(`Item ${index}:`, {
+                        categorySelectValue: categorySelect.val(),
+                        otherCategoryInputValue: otherCategoryInput.val(),
+                        otherCategoryInputVisible: otherCategoryInput.is(':visible')
+                    });
+                    
                     if (categorySelect.val() === 'Lainnya') {
-                        const otherCategoryValue = $(this).find('.other-category-input').val() || 'Lainnya';
-                        const newCategoryValue = 'Lainnya:' + otherCategoryValue;
+                        // Get the other category value, default to empty string if not provided
+                        const otherValue = otherCategoryInput.val() ? otherCategoryInput.val().trim() : '';
+                        const combinedValue = otherValue ? 'Lainnya: ' + otherValue : 'Lainnya';
                         
-                        // Update the select to include the custom option
-                        categorySelect.append(new Option(newCategoryValue, newCategoryValue, true, true));
-                        categorySelect.val(newCategoryValue);
+                        // Get the proper name for the repeater field
+                        // The structure is kt_docs_repeater_basic[index][category]
+                        const properName = `kt_docs_repeater_basic[${index}][category]`;
+                        
+                        // Create a hidden input that will be sent with the form with the proper name
+                        const hiddenInput = $('<input>', {
+                            type: 'hidden',
+                            name: properName,
+                            value: combinedValue
+                        });
+                        
+                        // Disable the original select to prevent it from being submitted with an empty value
+                        categorySelect.prop('disabled', true);
+                        
+                        // Append the hidden input to the form
+                        $(this).append(hiddenInput);
+                        
+                        // Log for debugging
+                        console.log('Processed "Other" category:', {
+                            originalSelect: categorySelect.attr('name'),
+                            indexInRepeater: index,
+                            properName: properName,
+                            combinedValue: combinedValue,
+                            originalValue: otherValue
+                        });
                     }
                 });
                 
-                // Recalculate all totals before submission
-                recalculateAllTotals();
+                // Process cost inputs to ensure proper numeric format for validation
+                $(this).find('[data-repeater-item]').each(function(index) {
+                    const costInput = $(this).find('input[name="cost"]');
+                    
+                    if (costInput.length) {
+                        // Get the raw value with currency format
+                        const rawValue = costInput.val();
+                        
+                        // Convert from "Rp. 999.999.999,99" format to a clean number
+                        // Remove currency symbol, thousand separators, and convert comma to dot for decimal
+                        let cleanValue = rawValue.replace(/[^\d,]/g, '').replace(',', '.');
+                        
+                        // Get the proper name for the repeater field cost
+                        const properName = `kt_docs_repeater_basic[${index}][cost]`;
+                        
+                        // Create a hidden input with the numeric value for validation
+                        const numericCostInput = $('<input>', {
+                            type: 'hidden',
+                            name: properName,
+                            value: cleanValue
+                        });
+                        
+                        // Temporarily disable the original input to prevent it from being submitted
+                        costInput.prop('disabled', true);
+                        
+                        // Append the hidden input
+                        $(this).append(numericCostInput);
+                        
+                        // Log for debugging
+                        console.log('Processed cost input:', {
+                            original: rawValue,
+                            cleaned: cleanValue,
+                            properName: properName
+                        });
+                    }
+                });
                 
                 // Collect employee IDs from checkboxes
                 var employeeIds = [];
@@ -1471,37 +710,13 @@
                     employeeIds.push($(this).val());
                 });
                 
+                // Log the selected employee IDs to console for debugging
+                console.log('Selected Employee IDs:', employeeIds);
+                
                 const areaId = $('select[name="area_id"]').val();
                 const formData = new FormData(this);
                 formData.append('area_id', areaId);
                 formData.append('_token', '{{ csrf_token() }}');
-                
-                // Add score_positive data
-                const scorePositive = $('input[name="score_positive"]:checked').val();
-                if (scorePositive) {
-                    formData.append('score_positive', scorePositive);
-                }
-                
-                // Add impacts data
-                const impacts = [];
-                $('input[name="impacts[]"]:checked').each(function() {
-                    let impactValue = $(this).val();
-                    
-                    // Handle "Lainnya" checkbox with custom text
-                    if (impactValue === 'lainnya' || $(this).hasClass('lainnya-checkbox')) {
-                        const lainnyaText = $('.lainnya-input').val();
-                        if (lainnyaText) {
-                            impactValue = 'lainnya:' + lainnyaText;
-                        }
-                    }
-                    
-                    impacts.push(impactValue);
-                });
-                
-                // Append impacts to formData
-                impacts.forEach(function(impact) {
-                    formData.append('impacts[]', impact);
-                });
                 
                 // Clear any existing employee_ids fields to prevent duplicates
                 if (formData.getAll('employee_ids[]').length > 0) {
@@ -1510,75 +725,7 @@
                     }
                 }
                 
-                // Collect and serialize component data for each category
-                $('.category-item').each(function(categoryIndex) {
-                    const categoryItem = $(this);
-                    
-                    // Get category data
-                    const categorySelect = categoryItem.find('select.level1-select');
-                    const categoryValue = categorySelect.val();
-                    const otherCategoryValue = categoryItem.find('.other-category-input').val();
-                    const finalCategory = categoryValue === 'Lainnya' && otherCategoryValue ? 
-                                        `Lainnya: ${otherCategoryValue}` : categoryValue;
-                    const totalCost = parseFloat(categoryItem.find('.category-final-cost').val()) || 0;
-                    
-                    // Add basic category data
-                    formData.append(`kt_docs_repeater_basic[${categoryIndex}][category]`, finalCategory);
-                    formData.append(`kt_docs_repeater_basic[${categoryIndex}][cost]`, totalCost);
-                    
-                    const components = [];
-                    
-                    categoryItem.find('.component-item').each(function() {
-                        const componentItem = $(this);
-                        const componentName = componentItem.find('.component-name').val() || 'Component';
-                        
-                        // Collect all input items for this component
-                        const inputs = [];
-                        componentItem.find('.input-item').each(function() {
-                            const inputItem = $(this);
-                            const inputTitle = inputItem.find('.input-title').val() || '';
-                            const inputPrice = inputItem.find('.input-price').val() || '0';
-                            const inputOperator = inputItem.find('.input-operator').val() || 'add';
-                            
-                            // Convert operator values to match backend expectations
-                            let operatorSymbol = '*';
-                            switch(inputOperator) {
-                                case 'add': operatorSymbol = '+'; break;
-                                case 'subtract': operatorSymbol = '-'; break;
-                                case 'multiply': operatorSymbol = '*'; break;
-                                case 'divide': operatorSymbol = '/'; break;
-                            }
-                            
-                            // Use the price value as-is (do not remove decimal point)
-                            let cleanPrice = inputPrice; // No replace, no parse, just as string from input
-                            inputs.push({
-                                sub_name: inputTitle,
-                                price: cleanPrice,
-                                operator: operatorSymbol
-                            });
-                        });
-                        
-                        if (inputs.length > 0) {
-                            // The first input becomes the main component, others become sub_items
-                            const mainInput = inputs[0];
-                            const subItems = inputs.slice(1);
-                            
-                            components.push({
-                                name: componentName,
-                                sub_name: mainInput.sub_name,
-                                price: mainInput.price,
-                                operator: mainInput.operator,
-                                sub_items: subItems
-                            });
-                        }
-                    });
-                    
-                    if (components.length > 0) {
-                        formData.append(`kt_docs_repeater_basic[${categoryIndex}][components]`, JSON.stringify(components));
-                    }
-                });
-                
-                // Append employee IDs to form data
+                // Append employee IDs to form data - ensure this is included
                 employeeIds.forEach(function(id) {
                     formData.append('employee_ids[]', id);
                 });
@@ -1605,6 +752,9 @@
                                 // Reload the page to reflect the submitted data
                                 location.reload();
                             });
+                            
+                            // Log success for debugging
+                            console.log('Form submitted successfully:', response);
                         }
                     },
                     error: function(xhr) {
@@ -1619,15 +769,17 @@
                                 }
                             });
                             
+                            // Reload the page after 2 seconds
                             setTimeout(function() {
                                 location.reload();
                             }, 2000);
                         } else if (xhr.responseJSON?.errors) {
-                            // Handle validation errors
+                            // Handle specific validation errors
                             if (xhr.responseJSON.errors.employee_ids) {
+                                // Employee selection errors
                                 Swal.fire({
                                     title: "Peserta Wajib Dipilih",
-                                    text: xhr.responseJSON.errors.employee_ids[0],
+                                    text: xhr.responseJSON.errors.employee_ids[0] || "Silakan pilih minimal satu peserta pelatihan",
                                     icon: "error",
                                     buttonsStyling: false,
                                     confirmButtonText: "Ok",
@@ -1638,18 +790,37 @@
                                 $('html, body').animate({
                                     scrollTop: $('.employee-checkbox').first().offset().top - 100
                                 }, 500);
-                            } else {
-                                Object.keys(xhr.responseJSON.errors).forEach(key => {
-                                    toastr.error(xhr.responseJSON.errors[key][0]);
+                            } else if (xhr.responseJSON.errors['kt_docs_repeater_basic.0.category'] || 
+                                       xhr.responseJSON.errors['kt_docs_repeater_basic.0.cost']) {
+                                // Tangible benefits validation errors
+                                Swal.fire({
+                                    title: "Error Tangible Benefit",
+                                    text: "Pastikan semua field kategori dan biaya telah diisi dengan benar",
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
                                 });
+                                $('html, body').animate({
+                                    scrollTop: $('#kt_docs_repeater_basic').offset().top - 100
+                                }, 500);
+                                
+                                // Log the validation errors for debugging
+                                console.error('Tangible validation errors:', xhr.responseJSON.errors);
+                            } else {
+                                // Other validation errors
+                                Object.keys(xhr.responseJSON.errors).forEach(
+                                    key => {
+                                        toastr.error(xhr.responseJSON
+                                            .errors[key][0]);
+                                    });
                             }
                         } else {
+                            toastr.error("Terjadi kesalahan saat mengirim formulir");
+                            // Log the complete error for debugging
                             console.error('Form submission error:', xhr);
-                            let errorMessage = "Terjadi kesalahan saat mengirim formulir";
-                            if (xhr.responseJSON && xhr.responseJSON.error) {
-                                errorMessage += ": " + xhr.responseJSON.error;
-                            }
-                            toastr.error(errorMessage);
                         }
                     }
                 });

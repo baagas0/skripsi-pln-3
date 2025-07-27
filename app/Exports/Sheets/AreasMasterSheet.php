@@ -7,12 +7,27 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Illuminate\Support\Facades\Auth;
 
 class AreasMasterSheet implements FromCollection, WithHeadings, WithStyles
 {
     public function collection()
     {
-        return Area::select('name')->get();
+        $roleId = Auth::user()->role_id;
+        return Area::select('name')
+        ->when($roleId == 7, function ($query) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+        })
+        ->when($roleId == 8, function ($query) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('unit_id', $unitIds ?? []);
+        })
+        ->get();
     }
 
     public function headings(): array

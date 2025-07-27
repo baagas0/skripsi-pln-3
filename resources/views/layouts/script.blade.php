@@ -38,7 +38,7 @@
         timer: 3000
     });
 
-    Inputmask(" 999.999.999,99", {
+    Inputmask("Rp. 999.999.999,99", {
         "numericInput": true
     }).mask('[data-control="currency"]');
 </script>
