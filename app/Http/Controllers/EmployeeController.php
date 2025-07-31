@@ -25,9 +25,23 @@ class EmployeeController extends Controller
     public function getIndex() 
     {
         $auth = Auth::user();
+        $roleId = $auth->role_id;
         $units = Unit::when($auth->role_id == 1, function ($q) use ($auth) {
             $q->where('id', $auth->unit_id);
-        })->when($auth->role_id !== 1 && $auth->role_id !== 7, function ($q) use ($auth) {
+        })
+        ->when($roleId == 7, function ($query) {
+            // HTD melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('id', $unitIds ?? []);
+        })
+        ->when($roleId == 8, function ($query) {
+            // Vice President melihat data dari unit yang mereka kelola
+            $unitIdsString = Auth::user()->manage_unit_ids;
+            $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+            return $query->whereIn('id', $unitIds ?? []);
+        })
+        ->when($auth->role_id !== 1 && $auth->role_id !== 7, function ($q) use ($auth) {
             // $q->where('area_id', $auth->area_id);
         })->get();
         $areas = Area::all();
@@ -37,6 +51,7 @@ class EmployeeController extends Controller
     public function getData(Request $request) 
     {
         $auth = Auth::user();
+        $roleId = $auth->role_id;
         $search = $request->search;
         $searchValue = isset($search['value']) ? $search['value'] : null;
 
@@ -44,6 +59,18 @@ class EmployeeController extends Controller
             // ->where('unit_id', $auth->unit_id)
             ->when($auth->unit_id, function ($q) use ($auth) {
                 $q->where('unit_id', $auth->unit_id);
+            })
+            ->when($roleId == 7, function ($query) {
+                // HTD melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
+            })
+            ->when($roleId == 8, function ($query) {
+                // Vice President melihat data dari unit yang mereka kelola
+                $unitIdsString = Auth::user()->manage_unit_ids;
+                $unitIds = is_string($unitIdsString) ? json_decode($unitIdsString) : $unitIdsString;
+                return $query->whereIn('unit_id', $unitIds ?? []);
             })
             ->when($searchValue, function ($q) use ($searchValue) {
                 $q->where(function ($query) use ($searchValue) {
