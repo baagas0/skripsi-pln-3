@@ -284,11 +284,7 @@
                                 </tr>
                             </table>
 
-                            @if (auth()->user()->role_id == 6)
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                </div>
-                            @endif
+                            
                         </form>
 
 
@@ -421,8 +417,8 @@
                                                                                     </div>
                                                                                     <div class="col-md-3">
                                                                                         <label class="form-label">Price:</label>
-                                                                                        <input type="number" step="0.01" class="form-control input-price" placeholder="0" 
-                                                                                            value="{{ $detail->price }}" {{ auth()->user()->role_id == 6 ? '' : 'disabled' }}/>                      
+                                                                                        <input type="text" step="0.00000000000000000000000000000000000001" class="form-control input-price" placeholder="0" 
+                                                                                            value="{{ $detail->price + 0 }}" {{ auth()->user()->role_id == 6 ? '' : 'disabled' }}/>                      
                                                                                         </div>
                                                                                     <div class="col-md-3">
                                                                                         <label class="form-label">Operator:</label>
@@ -1591,7 +1587,7 @@
                 groupSeparator: '.',
                 radixPoint: ',',
                 autoGroup: true,
-                digits: 2,
+                digits: 50,
                 digitsOptional: false,
                 allowMinus: false,
                 placeholder: '0,00',

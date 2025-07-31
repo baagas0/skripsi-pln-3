@@ -270,11 +270,7 @@
                                 </tr>
                             </table>
 
-                            @if (!$scoreLv4)
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                </div>
-                            @endif
+                            
                         </form>
 
 
@@ -408,7 +404,7 @@
                                                                                     <div class="col-md-3">
                                                                                         <label class="form-label">Price:</label>
                                                                                         <input type="number" step="0.01" class="form-control input-price" placeholder="0" 
-                                                                                            value="{{ $detail->price }}" {{ !$scoreLv4 ? '' : 'disabled' }}/>                      
+                                                                                            value="{{ $detail->price + 0 }}" {{ !$scoreLv4 ? '' : 'disabled' }}/>                      
                                                                                         </div>
                                                                                     <div class="col-md-3">
                                                                                         <label class="form-label">Operator:</label>
@@ -1543,7 +1539,7 @@
                 groupSeparator: '.',
                 radixPoint: ',',
                 autoGroup: true,
-                digits: 2,
+                digits: 50,
                 digitsOptional: false,
                 allowMinus: false,
                 placeholder: '0,00',

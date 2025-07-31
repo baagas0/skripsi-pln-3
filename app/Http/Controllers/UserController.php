@@ -89,7 +89,7 @@ class UserController extends Controller
                 $rules['manage_unit_ids'] = 'required|array|min:1';
                 $rules['manage_unit_ids.*'] = 'exists:units,id';
                 break;
-            case 8: 
+            case 8: // Vice President
                 $rules['manage_unit_ids'] = 'required|array|min:1';
                 $rules['manage_unit_ids.*'] = 'exists:units,id';
                 break;
@@ -183,6 +183,10 @@ class UserController extends Controller
                 $rules['manage_unit_ids'] = 'required|array|min:1';
                 $rules['manage_unit_ids.*'] = 'exists:units,id';
                 break;
+            case 8: 
+                $rules['manage_unit_ids'] = 'required|array|min:1';
+                $rules['manage_unit_ids.*'] = 'exists:units,id';
+                break;
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -223,6 +227,9 @@ class UserController extends Controller
                 $userData['area_id'] = $request->area_id;
                 break;
             case 7:
+                $userData['manage_unit_ids'] = json_encode($request->manage_unit_ids);
+                break;
+            case 8:
                 $userData['manage_unit_ids'] = json_encode($request->manage_unit_ids);
                 break;
         }

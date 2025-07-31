@@ -72,13 +72,13 @@ class MenuHelper
                 'title' => 'Data Pegawai',
                 'icon' => 'ki-outline ki-people',
                 'route' => '.employee',
-                'roles' => [7, 8, 1],
+                'roles' => [7, 8, 1, 999],
             ],
             [
                 'title' => 'Data Vendor',
                 'icon' => 'ki-outline ki-profile-user',
                 'route' => '.vendor',
-                'roles' => [7, 8, 1],
+                'roles' => [7, 8, 1, 999],
             ],
             [
                 'title' => 'Data Unit',
